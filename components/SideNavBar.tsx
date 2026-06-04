@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useWorkspace } from "../context/WorkspaceContext";
 
@@ -61,20 +62,17 @@ export const SideNavBar: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed left-0 top-0 h-screen w-nav-width bg-surface-glass backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex flex-col py-6 px-3 z-50 hidden md:flex">
+    <nav className="fixed left-0 top-0 h-screen w-[280px] bg-surface-glass backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex flex-col py-6 px-3 z-50 hidden md:flex">
       {/* Brand Header */}
-      <div className="flex items-center gap-3 mb-6 px-3">
-        <div className="w-10 h-10 flex items-center justify-center">
-          <img
-            src="/Logo/Transpart.png"
-            alt="Hipmipreneur Logo"
-            className="w-10 h-10 object-contain filter drop-shadow-[0_0_8px_rgba(192,193,255,0.4)]"
-          />
-        </div>
-        <div className="flex flex-col">
-          <span className="font-headline text-lg font-bold text-primary tracking-tight">Hipmipreneur</span>
-          <span className="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider">Co-Founder AI</span>
-        </div>
+      <div className="flex items-center justify-start mb-6 px-3 h-12 shrink-0">
+        <Image
+          src="/Logo/Transpart.png"
+          alt="Hipmipreneur Logo"
+          width={160}
+          height={48}
+          className="object-contain filter drop-shadow-[0_0_8px_rgba(192,193,255,0.4)]"
+          style={{ width: "auto", height: "100%" }}
+        />
       </div>
 
       {/* Main Navigation - Scrollable */}
@@ -129,6 +127,7 @@ export const SideNavBar: React.FC = () => {
         {/* User Profile Snippet */}
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low border border-outline-glow">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-glow shrink-0 relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               alt="Founders Profile"
               className="w-full h-full object-cover"

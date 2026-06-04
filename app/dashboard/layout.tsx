@@ -22,7 +22,7 @@ export default function DashboardLayout({
       <SideNavBar />
 
       {/* Main content viewport */}
-      <div className="flex-1 flex flex-col md:ml-nav-width relative z-10 min-w-0">
+      <div className="flex-1 flex flex-col md:ml-[280px] relative z-10 min-w-0">
         {/* Top header navbar */}
         <TopHeader />
 

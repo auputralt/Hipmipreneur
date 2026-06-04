@@ -49,8 +49,9 @@ async function callLLM(systemPrompt: string, userPrompt: string) {
       errorMsg = `OpenRouter returned status ${response.status}: ${await response.text()}`;
       console.warn("OpenRouter failed, falling back to BluesMind:", errorMsg);
     }
-  } catch (e: any) {
-    errorMsg = `OpenRouter error: ${e?.message || e}`;
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    errorMsg = `OpenRouter error: ${msg}`;
     console.warn("OpenRouter failed, falling back to BluesMind:", errorMsg);
   }
 
@@ -78,8 +79,9 @@ async function callLLM(systemPrompt: string, userPrompt: string) {
     } else {
       throw new Error(`BluesMind returned status ${response.status}: ${await response.text()}`);
     }
-  } catch (e: any) {
-    throw new Error(`Both LLM providers failed. Primary error: ${errorMsg}. Secondary error: ${e?.message || e}`);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new Error(`Both LLM providers failed. Primary error: ${errorMsg}. Secondary error: ${msg}`);
   }
 }
 
@@ -172,7 +174,7 @@ Lean Canvas Context:
 - Problems: ${data.canvas.problem}
 
 Completed Interviews:
-${data.interviews.map((int: any, idx: number) => `
+${data.interviews.map((int: { respondentName: string; jobRole: string; transcriptText: string }, idx: number) => `
 --- INTERVIEW #${idx + 1} ---
 Respondent: ${int.respondentName} (${int.jobRole})
 Transcript:
@@ -297,8 +299,9 @@ Elevator Pitch: ${data.positioning.elevatorPitch}`;
     const parsedData = cleanAndParseJSON(textOutput);
 
     return NextResponse.json(parsedData);
-  } catch (err: any) {
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Internal Server Error";
     console.error("AI route error:", err);
-    return NextResponse.json({ error: err.message || "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

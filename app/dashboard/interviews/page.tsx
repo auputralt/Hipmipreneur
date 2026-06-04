@@ -441,8 +441,8 @@ export default function InterviewsPage() {
 
             {/* Conversation Log bubbles */}
             <div className="flex-1 overflow-y-auto p-2 space-y-4 border border-outline-glow/20 rounded-lg bg-surface-deep/50 custom-scrollbar">
-              {selectedInterview.transcriptText.split("\n\n").map((bubble, bIdx) => {
-                const isIva = bubble.startsWith("IVA:");
+              {selectedInterview.transcriptText.split("\n").filter(line => line.trim() !== "").map((bubble, bIdx) => {
+                const isIva = bubble.startsWith("IVA:") || bubble.startsWith("Interviewer:");
                 const isInterviewer = bubble.startsWith("Interviewer:");
                 const isUserOrIva = isIva || isInterviewer;
                 const textOnly = bubble.replace(/^(IVA:|Interviewer:|[\w\s\(\)#]+:)\s*/, "");

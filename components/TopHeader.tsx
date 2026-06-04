@@ -23,7 +23,7 @@ export const TopHeader: React.FC = () => {
 
   return (
     <>
-      <header className="bg-surface-glass text-primary font-headline fixed top-0 right-0 left-0 md:left-nav-width h-16 backdrop-blur-md border-b border-outline-glow shadow-sm flex items-center justify-between px-6 z-40">
+      <header className="bg-surface-glass text-primary font-headline fixed top-0 right-0 left-0 md:left-[280px] h-16 backdrop-blur-md border-b border-outline-glow shadow-sm flex items-center justify-between px-6 z-40">
         {/* Left Side: Workspace Selector */}
         <div className="flex items-center gap-4 relative">
           <button

@@ -59,15 +59,15 @@
   --font-body: var(--font-plus-jakarta), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
-  --spacing-xl: 80px;
-  --spacing-base: 8px;
+  --spacing-layout-xl: 80px;
+  --spacing-layout-base: 8px;
   --spacing-nav-width: 280px;
-  --spacing-sm: 12px;
-  --spacing-gutter: 24px;
-  --spacing-xs: 4px;
-  --spacing-md: 24px;
-  --spacing-lg: 48px;
-  --spacing-margin: 32px;
+  --spacing-layout-sm: 12px;
+  --spacing-layout-gutter: 24px;
+  --spacing-layout-xs: 4px;
+  --spacing-layout-md: 24px;
+  --spacing-layout-lg: 48px;
+  --spacing-layout-margin: 32px;
 }
 
 body {

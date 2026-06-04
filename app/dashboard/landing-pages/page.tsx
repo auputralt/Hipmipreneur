@@ -101,44 +101,44 @@ export default function LandingPagesPage() {
     <title>${currentLp.heroHeadline}</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body className="bg-[#0c1324] text-[#dce2fa] min-h-screen font-sans">
+<body class="bg-[#0c1324] text-[#dce2fa] min-h-screen font-sans">
     <!-- Navigation -->
-    <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center border-b border-gray-800">
-        <div className="font-bold text-xl text-[#c0c1ff]">${activeWorkspace.name}</div>
-        <a href="#" className="bg-[#c0c1ff] text-[#1000a9] px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition-all">${currentLp.ctaText}</a>
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center border-b border-gray-800">
+        <div class="font-bold text-xl text-[#c0c1ff]">${activeWorkspace.name}</div>
+        <a href="#" class="bg-[#c0c1ff] text-[#1000a9] px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition-all">${currentLp.ctaText}</a>
     </nav>
 
     <!-- Hero -->
-    <header className="max-w-4xl mx-auto text-center px-6 py-20 space-y-6">
-        <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#c0c1ff] to-[#5de6ff] leading-tight">${currentLp.heroHeadline}</h1>
-        <p className="text-lg text-gray-400 max-w-2xl mx-auto">${currentLp.heroSubheadline}</p>
+    <header class="max-w-4xl mx-auto text-center px-6 py-20 space-y-6">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#c0c1ff] to-[#5de6ff] leading-tight">${currentLp.heroHeadline}</h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto">${currentLp.heroSubheadline}</p>
         <div>
-            <button className="bg-[#5de6ff] text-[#00363e] px-8 py-3.5 rounded-lg font-bold text-base hover:opacity-90 transition-all shadow-[0_0_20px_rgba(93,230,255,0.3)]">${currentLp.ctaText}</button>
+            <button class="bg-[#5de6ff] text-[#00363e] px-8 py-3.5 rounded-lg font-bold text-base hover:opacity-90 transition-all shadow-[0_0_20px_rgba(93,230,255,0.3)]">${currentLp.ctaText}</button>
         </div>
-        <p className="text-xs text-gray-500 font-mono">${currentLp.socialProof}</p>
+        <p class="text-xs text-gray-500 font-mono">${currentLp.socialProof}</p>
     </header>
 
     <!-- Features -->
-    <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-center font-bold text-2xl mb-12">Fitur Utama Platform</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <section class="max-w-7xl mx-auto px-6 py-16">
+        <h2 class="text-center font-bold text-2xl mb-12">Fitur Utama Platform</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             ${currentLp.features.map(f => `
-            <div className="bg-[#181f31] p-6 rounded-xl border border-gray-800 space-y-3">
-                <h3 className="font-bold text-lg text-[#5de6ff]">${f.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">${f.description}</p>
+            <div class="bg-[#181f31] p-6 rounded-xl border border-gray-800 space-y-3">
+                <h3 class="font-bold text-lg text-[#5de6ff]">${f.title}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">${f.description}</p>
             </div>
             `).join("")}
         </div>
     </section>
 
     <!-- FAQs -->
-    <section className="max-w-3xl mx-auto px-6 py-16 border-t border-gray-800">
-        <h2 className="text-center font-bold text-2xl mb-10">Pertanyaan Umum (FAQs)</h2>
-        <div className="space-y-6">
+    <section class="max-w-3xl mx-auto px-6 py-16 border-t border-gray-800">
+        <h2 class="text-center font-bold text-2xl mb-10">Pertanyaan Umum (FAQs)</h2>
+        <div class="space-y-6">
             ${currentLp.faq.map(faq => `
-            <div className="space-y-2">
-                <h4 className="font-bold text-base text-[#c0c1ff]">${faq.question}</h4>
-                <p className="text-sm text-gray-400 leading-relaxed">${faq.answer}</p>
+            <div class="space-y-2">
+                <h4 class="font-bold text-base text-[#c0c1ff]">${faq.question}</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">${faq.answer}</p>
             </div>
             `).join("")}
         </div>
@@ -378,9 +378,9 @@ export default function LandingPagesPage() {
               </div>
 
               {/* Rendered Browser Page Box */}
-              <div className="flex-1 bg-surface-deep border border-outline-glow rounded-xl overflow-hidden min-h-[400px] flex items-center justify-center relative bg-grid-pattern opacity-95">
+              <div className="flex-1 bg-surface-deep border border-outline-glow rounded-xl overflow-hidden min-h-[400px] flex flex-col items-stretch justify-start relative bg-grid-pattern opacity-95">
                 <div 
-                  className={`w-full h-full p-6 overflow-y-auto custom-scrollbar flex flex-col gap-10 transition-all duration-300 ${previewMode === "mobile" ? "max-w-[360px] border-x border-outline-glow/50 bg-[#070e1e]" : "max-w-full"}`}
+                  className={`w-full h-full p-6 overflow-y-auto custom-scrollbar flex flex-col gap-10 transition-all duration-300 ${previewMode === "mobile" ? "max-w-[360px] border-x border-outline-glow/50 bg-[#070e1e] mx-auto" : "max-w-full"}`}
                 >
                   
                   {/* Mock Navbar */}

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useWorkspace } from "../../context/WorkspaceContext";
 
 export default function OnboardingPage() {
@@ -60,10 +61,12 @@ export default function OnboardingPage() {
         {/* Brand logo & header */}
         <div className="flex flex-col items-center text-center gap-2">
           <div className="w-16 h-16 flex items-center justify-center">
-            <img
+            <Image
               src="/Logo/Transpart.png"
               alt="Hipmipreneur Logo"
-              className="w-16 h-16 object-contain filter drop-shadow-[0_0_15px_rgba(128,131,255,0.5)]"
+              width={64}
+              height={64}
+              className="object-contain filter drop-shadow-[0_0_15px_rgba(128,131,255,0.5)]"
             />
           </div>
           <h1 className="font-headline text-3xl font-bold tracking-tight text-primary mt-2">Welcome to Hipmipreneur</h1>
