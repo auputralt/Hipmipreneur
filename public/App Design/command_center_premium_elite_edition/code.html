@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hipmipreneur - Command Center Dashboard</title>
+<script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzNhY2RkZjFmZTFiMzRiOWRiNDIwYzZiMjE1ZjQ5MjU2EgsSBxCxybefug0YAZIBJAoKcHJvamVjdF9pZBIWQhQxNzIwNTI1OTQ1NTk4NDEwMDg1Ng%26filename%3D%26opi%3D89354086&amp;app=ai.perplexity.comet&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-glow": "rgba(192, 193, 255, 0.2)",
+                      "surface-tint": "#c0c1ff",
+                      "on-error": "#690005",
+                      "glow-primary": "rgba(128, 131, 255, 0.4)",
+                      "outline-variant": "#464554",
+                      "surface-container-low": "#141b2c",
+                      "surface-deep": "#070d1f",
+                      "glow-secondary": "rgba(93, 230, 255, 0.6)",
+                      "surface-bright": "#32394c",
+                      "on-secondary-container": "#00515d",
+                      "inverse-surface": "#dce2fa",
+                      "secondary-fixed": "#a2eeff",
+                      "error-container": "#93000a",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed": "#07006c",
+                      "tertiary-container": "#8a8cc6",
+                      "surface-variant": "#2e3447",
+                      "on-primary-container": "#0d0096",
+                      "primary-fixed": "#e1e0ff",
+                      "inverse-on-surface": "#293042",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "primary": "#c0c1ff",
+                      "surface-dim": "#0c1324",
+                      "tertiary": "#c0c1ff",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-secondary": "#00363e",
+                      "error": "#ffb4ab",
+                      "tertiary-fixed": "#e1e0ff",
+                      "outline": "#908fa0",
+                      "surface-container": "#181f31",
+                      "on-tertiary-fixed": "#131449",
+                      "surface-glass": "rgba(25, 31, 49, 0.4)",
+                      "on-secondary-fixed-variant": "#004e5a",
+                      "on-secondary-fixed": "#001f25",
+                      "on-tertiary": "#292b5e",
+                      "secondary": "#5de6ff",
+                      "on-surface": "#dce2fa",
+                      "surface-container-highest": "#2e3447",
+                      "on-tertiary-fixed-variant": "#404176",
+                      "surface-container-lowest": "#070e1e",
+                      "on-background": "#dce2fa",
+                      "tertiary-fixed-dim": "#c0c1ff",
+                      "secondary-fixed-dim": "#2fd9f4",
+                      "secondary-container": "#00cbe6",
+                      "surface": "#0c1324",
+                      "on-primary": "#1000a9",
+                      "surface-container-high": "#232a3c",
+                      "on-tertiary-container": "#222457",
+                      "background": "#0c1324",
+                      "surface-card": "#191f31",
+                      "inverse-primary": "#494bd6",
+                      "primary-container": "#8083ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "80px",
+                      "base": "8px",
+                      "nav-width": "280px",
+                      "sm": "12px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "md": "24px",
+                      "lg": "48px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-panel {
+            background: rgba(25, 31, 49, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(192, 193, 255, 0.2);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(128, 131, 255, 0.4);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(93, 230, 255, 0.6);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #c0c1ff, #5de6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0c1324; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(192, 193, 255, 0.2); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(192, 193, 255, 0.4); 
+        }
+      </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden min-h-screen flex">
+<!-- Ambient Background Glows -->
+<div class="fixed top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-primary/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+<div class="fixed bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-secondary/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+<!-- SideNavBar Component -->
+<nav class="fixed left-0 top-0 h-screen w-nav-width bg-surface-glass backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex flex-col py-margin px-base z-50 hidden md:flex">
+<!-- Brand Header -->
+<div class="flex items-center gap-sm mb-lg px-sm">
+<div class="w-10 h-10 rounded-full border border-outline-glow overflow-hidden relative flex-shrink-0">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional headshot of a confident tech founder in a modern office space, lit with cool, cinematic blue and purple lighting matching a high-tech corporate aesthetic. The background is slightly blurred showing glass walls and subtle neon accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9FOzSiaFLwE8I40Ogdi-yhZbJ3RkPUdFIvZ6GmOjYqBzTPTQfVylWIQoswPgyr0baL-qROgG1e0_cLErNBV2KwCs7B6rfDY78o1GnPDnbsfE6mldOzDiXF4ouxxz-wq1JqodX9oq5Om_l3rt5sHqS7O0wPoicDNHw0v6x6URfQz0yktJBwyvE2MrIDp562cTQv_S9JV6w9YZ6bndMcZr08ESyAsNYCwrujZieb-165QkXO9R5S9Mav9QbUTTohec0TWYFs1M2eNCq"/>
+<div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-full"></div>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary">Hipmipreneur</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-[10px]">Venture Hub</span>
+</div>
+</div>
+<!-- Main Navigation -->
+<ul class="flex flex-col gap-xs flex-1">
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-primary font-bold border-l-4 border-primary bg-primary/10 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+<span>Venture Roadmap</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+<span>Market Intelligence</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span>Team Builder</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span>Funding Radar</span>
+</a>
+</li>
+</ul>
+<!-- Bottom Section -->
+<div class="mt-auto flex flex-col gap-md">
+<!-- Ask IVA CTA -->
+<button class="w-full flex items-center justify-center gap-sm py-sm px-md rounded-lg bg-inverse-primary text-white font-label-md text-label-md neon-glow-primary hover:bg-primary-container hover:text-on-primary-container transition-all duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span>Ask IVA</span>
+</button>
+<!-- Footer Navigation -->
+<ul class="flex flex-col gap-xs border-t border-outline-glow pt-sm">
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md text-sm">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+<span class="font-label-md text-label-md text-sm">Support</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopNavBar Component (Mobile Only) -->
+<nav class="fixed top-0 left-0 w-full h-16 bg-surface-glass backdrop-blur-md border-b border-outline-glow shadow-sm flex items-center justify-between px-gutter z-50 md:hidden">
+<div class="flex items-center gap-sm">
+<span class="font-headline-md text-headline-md font-extrabold text-primary">Hipmipreneur AI</span>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-sm scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-1 ml-0 md:ml-nav-width pt-20 md:pt-margin px-gutter md:px-margin pb-margin relative z-10 w-full">
+<div class="max-w-[1400px] mx-auto w-full h-full flex flex-col gap-gutter">
+<!-- Page Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-sm">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-xs">Command Center</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Your AI-driven venture control nexus.</p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="relative w-full md:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-high border-outline-glow rounded-full py-2 pl-10 pr-4 text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-sm transition-all shadow-[inset_0_0_10px_rgba(0,0,0,0.2)]" placeholder="Search insights..." type="text"/>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter auto-rows-min">
+<!-- Hero / Venture Roadmap Visualization (Spans 8 cols) -->
+<section class="col-span-1 md:col-span-8 md:row-span-2 glass-panel rounded-xl overflow-hidden relative group flex flex-col">
+<!-- Background 3D Image -->
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-screen transition-opacity duration-500 group-hover:opacity-60" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOKADy3rnojtOxfEWqd5ChkujR2Uim27LclIRFqTSV_vb9_9inS5RHgeiEU5SyVhSUF09kgSzNKLx4OYzV6LnKpJMY3Op17Wk2tvAFunb1qesWZ9jpNHzAUBAtEN4nbAAyD5OZkINxeppyOhIfBQpENGz2hWu1yqFbtuZTODXRBm6e1LsrSYDlb5dsqo41OWxF3RCxXrPZRoDN9y8wJFoCoCkilQm3uKa7LV2ZOJihr51N6Sj0lDorKJEdn0S129o7XK506Noocjkn'); background-size: cover; background-position: center;"></div>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-deep via-surface-deep/80 to-transparent z-0"></div>
+<!-- Content -->
+<div class="relative z-10 p-md flex-1 flex flex-col h-full min-h-[400px]">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">route</span>
+                                    Venture Roadmap
+                                </h2>
+<p class="font-body-md text-body-md text-primary mt-xs">Project Alpha - B2B SaaS</p>
+</div>
+<span class="px-sm py-xs rounded bg-primary/20 border border-primary/50 text-primary font-label-md text-label-md text-xs shadow-[inset_0_0_8px_rgba(192,193,255,0.3)]">Active Phase</span>
+</div>
+<!-- Roadmap Timeline Flow -->
+<div class="flex-1 flex flex-col relative pl-md mt-auto">
+<!-- Vertical Glowing Line -->
+<div class="absolute left-[24px] top-4 bottom-8 w-1 bg-gradient-to-b from-secondary via-primary to-surface-container-high rounded-full shadow-[0_0_10px_rgba(192,193,255,0.5)]"></div>
+<div class="flex flex-col gap-lg z-10">
+<!-- Phase 1: Completed -->
+<div class="relative pl-lg opacity-60">
+<div class="absolute left-[-5px] top-3 w-3 h-3 rounded-full bg-surface-container-high border-2 border-secondary z-10"></div>
+<div class="glass-panel p-sm rounded-lg border-t-2 border-t-secondary/50 border-dashed">
+<div class="flex justify-between items-center">
+<h3 class="font-label-md text-label-md text-on-surface">Phase 1: Validate with AI</h3>
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Phase 2: Active -->
+<div class="relative pl-lg transform transition-transform hover:translate-x-2">
+<div class="absolute left-[-8px] top-3 w-4 h-4 rounded-full bg-primary border-2 border-surface shadow-[0_0_15px_rgba(192,193,255,0.8)] z-10"></div>
+<div class="glass-panel p-md rounded-lg border-t-2 border-t-primary shadow-[inset_0_0_15px_rgba(192,193,255,0.15)] neon-glow-primary bg-surface-variant/30 cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg">Phase 2: Market Discovery</h3>
+<span class="bg-primary-container text-on-primary-container px-2 py-1 rounded text-xs font-label-md">In Progress</span>
+</div>
+<p class="font-body-md text-body-md text-sm text-on-surface-variant mb-sm">Analyzing competitor landscape and identifying whitespace opportunities via semantic search.</p>
+<div class="w-full bg-surface-deep h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%] rounded-full shadow-[0_0_8px_rgba(192,193,255,0.8)]"></div>
+</div>
+</div>
+</div>
+<!-- Phase 3: Locked -->
+<div class="relative pl-lg opacity-40">
+<div class="absolute left-[-5px] top-3 w-3 h-3 rounded-full bg-surface-container-high border-2 border-outline-variant z-10"></div>
+<div class="glass-panel p-sm rounded-lg border border-outline-variant border-dashed">
+<div class="flex justify-between items-center">
+<h3 class="font-label-md text-label-md text-on-surface">Phase 3: Prototype &amp; Test</h3>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">lock</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Validation Health Widget (Spans 4 cols) -->
+<section class="col-span-1 md:col-span-4 glass-panel rounded-xl p-md flex flex-col relative overflow-hidden group">
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary/10 blur-[40px] rounded-full"></div>
+<div class="flex justify-between items-center mb-md relative z-10">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide text-xs">Validation Health</h3>
+<span class="material-symbols-outlined text-secondary text-[20px]">monitor_heart</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center relative z-10 py-md">
+<!-- Circular progress simulation -->
+<div class="relative w-32 h-32 flex items-center justify-center mb-sm">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="rgba(46, 52, 71, 0.5)" stroke-width="6"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(93,230,255,0.5)] transition-all duration-1000 ease-out" cx="50" cy="50" fill="none" r="45" stroke="#5de6ff" stroke-dasharray="283" stroke-dashoffset="42" stroke-width="6"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-display-lg text-display-lg text-on-surface text-3xl">85<span class="text-secondary text-lg">%</span></span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-secondary text-center text-sm font-medium">Strong Market Fit Signal</p>
+</div>
+<div class="grid grid-cols-2 gap-sm relative z-10 border-t border-outline-glow pt-sm mt-auto">
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase font-data-mono">Signal/Noise</span>
+<span class="font-data-mono text-data-mono text-on-surface">3.4x</span>
+</div>
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase font-data-mono">Confidence</span>
+<span class="font-data-mono text-data-mono text-primary">High</span>
+</div>
+</div>
+</section>
+<!-- IVA Credits Widget (Spans 4 cols) -->
+<section class="col-span-1 md:col-span-4 glass-panel rounded-xl p-md flex flex-col relative overflow-hidden">
+<div class="absolute left-0 bottom-0 w-full h-1/2 bg-gradient-to-t from-primary/5 to-transparent"></div>
+<div class="flex justify-between items-center mb-md relative z-10">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide text-xs">Compute Credits</h3>
+<span class="material-symbols-outlined text-primary text-[20px]">bolt</span>
+</div>
+<div class="flex-1 flex flex-col justify-center relative z-10">
+<div class="flex items-baseline gap-xs mb-xs">
+<span class="font-display-lg text-display-lg text-on-surface text-4xl">14,250</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-sm">rem</span>
+</div>
+<div class="w-full bg-surface-deep h-1 rounded-full overflow-hidden mb-sm">
+<div class="bg-gradient-to-r from-primary to-inverse-primary h-full w-[45%]"></div>
+</div>
+<p class="font-data-mono text-data-mono text-xs text-on-surface-variant">Usage resets in 12 days</p>
+</div>
+<button class="w-full mt-auto py-2 rounded border border-outline-glow text-on-surface font-label-md text-label-md text-xs hover:bg-surface-variant/50 hover:text-primary transition-colors z-10 flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+                        Top Up
+                    </button>
+</section>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Lean Canvas - Hipmipreneur</title>
+<script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2UwYmI0YzE5Mzk2NDRkMWM5M2I5YWE5MWEzZjRkZTRjEgsSBxCxybefug0YAZIBJAoKcHJvamVjdF9pZBIWQhQxNzIwNTI1OTQ1NTk4NDEwMDg1Ng%26filename%3D%26opi%3D89354086&amp;app=ai.perplexity.comet&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-glow": "rgba(192, 193, 255, 0.2)",
+                      "surface-tint": "#c0c1ff",
+                      "on-error": "#690005",
+                      "glow-primary": "rgba(128, 131, 255, 0.4)",
+                      "outline-variant": "#464554",
+                      "surface-container-low": "#141b2c",
+                      "surface-deep": "#070d1f",
+                      "glow-secondary": "rgba(93, 230, 255, 0.6)",
+                      "surface-bright": "#32394c",
+                      "on-secondary-container": "#00515d",
+                      "inverse-surface": "#dce2fa",
+                      "secondary-fixed": "#a2eeff",
+                      "error-container": "#93000a",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed": "#07006c",
+                      "tertiary-container": "#8a8cc6",
+                      "surface-variant": "#2e3447",
+                      "on-primary-container": "#0d0096",
+                      "primary-fixed": "#e1e0ff",
+                      "inverse-on-surface": "#293042",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "primary": "#c0c1ff",
+                      "surface-dim": "#0c1324",
+                      "tertiary": "#c0c1ff",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-secondary": "#00363e",
+                      "error": "#ffb4ab",
+                      "tertiary-fixed": "#e1e0ff",
+                      "outline": "#908fa0",
+                      "surface-container": "#181f31",
+                      "on-tertiary-fixed": "#131449",
+                      "surface-glass": "rgba(25, 31, 49, 0.4)",
+                      "on-secondary-fixed-variant": "#004e5a",
+                      "on-secondary-fixed": "#001f25",
+                      "on-tertiary": "#292b5e",
+                      "secondary": "#5de6ff",
+                      "on-surface": "#dce2fa",
+                      "surface-container-highest": "#2e3447",
+                      "on-tertiary-fixed-variant": "#404176",
+                      "surface-container-lowest": "#070e1e",
+                      "on-background": "#dce2fa",
+                      "tertiary-fixed-dim": "#c0c1ff",
+                      "secondary-fixed-dim": "#2fd9f4",
+                      "secondary-container": "#00cbe6",
+                      "surface": "#0c1324",
+                      "on-primary": "#1000a9",
+                      "surface-container-high": "#232a3c",
+                      "on-tertiary-container": "#222457",
+                      "background": "#0c1324",
+                      "surface-card": "#191f31",
+                      "inverse-primary": "#494bd6",
+                      "primary-container": "#8083ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "80px",
+                      "base": "8px",
+                      "nav-width": "280px",
+                      "sm": "12px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "md": "24px",
+                      "lg": "48px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            overflow-x: hidden;
+        }
+        
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(192, 193, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(192, 193, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .data-stream {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, theme('colors.secondary'), transparent);
+            height: 1px;
+            width: 100px;
+            opacity: 0;
+            animation: stream 4s linear infinite;
+        }
+
+        @keyframes stream {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100vw); opacity: 0; }
+        }
+
+        .glass-panel {
+            background: theme('colors.surface-glass');
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid theme('colors.outline-glow');
+        }
+
+        .active-panel {
+            border: 1px solid theme('colors.primary');
+            box-shadow: inset 0 0 15px theme('colors.glow-primary'), 0 0 20px theme('colors.glow-primary');
+            animation: pulse-border 2s infinite alternate;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: inset 0 0 10px theme('colors.glow-primary'), 0 0 15px theme('colors.glow-primary'); border-color: rgba(192, 193, 255, 0.8); }
+            100% { box-shadow: inset 0 0 25px theme('colors.glow-primary'), 0 0 30px theme('colors.glow-primary'); border-color: rgba(192, 193, 255, 1); }
+        }
+
+        .ai-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Custom Scrollbar for inner elements */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.surface-variant');
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.primary');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative font-body-md text-body-md flex">
+<!-- Ambient Background Effects -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="absolute inset-0 bg-grid-pattern opacity-50"></div>
+<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px]"></div>
+<!-- Animated Data Streams -->
+<div class="data-stream top-[10%]" style="animation-delay: 0s;"></div>
+<div class="data-stream top-[30%]" style="animation-delay: 1.5s; width: 150px; background: linear-gradient(90deg, transparent, theme('colors.primary'), transparent);"></div>
+<div class="data-stream top-[60%]" style="animation-delay: 3s; width: 80px;"></div>
+<div class="data-stream top-[85%]" style="animation-delay: 0.5s; background: linear-gradient(90deg, transparent, theme('colors.primary'), transparent);"></div>
+</div>
+<!-- SideNavBar -->
+<nav class="bg-surface-glass backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] fixed left-0 top-0 h-screen w-nav-width hidden md:flex flex-col h-full py-margin px-base z-50">
+<!-- Brand -->
+<div class="flex items-center gap-3 px-4 mb-8">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-inverse-primary flex items-center justify-center shadow-[0_0_15px_rgba(192,193,255,0.5)]">
+<span class="material-symbols-outlined text-surface-dim font-bold" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Hipmipreneur</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Venture Hub</p>
+</div>
+</div>
+<!-- Main Nav -->
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-l-4 border-primary bg-primary/10 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+<span class="font-label-md text-label-md">Venture Roadmap</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">insights</span>
+<span class="font-label-md text-label-md">Market Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">groups</span>
+<span class="font-label-md text-label-md">Team Builder</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">payments</span>
+<span class="font-label-md text-label-md">Funding Radar</span>
+</a>
+</div>
+<!-- Footer Actions -->
+<div class="mt-auto space-y-4">
+<button class="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md shadow-[0_0_15px_rgba(128,131,255,0.4)] hover:bg-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:animate-pulse">smart_toy</span>
+                Ask IVA
+            </button>
+<div class="pt-4 border-t border-outline-glow space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+<!-- User Profile Snippet -->
+<div class="flex items-center gap-3 px-4 py-2 mt-4 rounded-lg bg-surface-container-low border border-outline-glow">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-glow">
+<img alt="Founders Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a confident tech founder in a well-lit studio. They have short dark hair, wear a sleek dark blazer over a crisp t-shirt, and offer a subtle, determined smile. The lighting is balanced, emphasizing a modern, approachable yet authoritative startup aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbqqnkvcAMm5pQYKhBHhE2JvniuVMi4j4zUbwVKFNeQTOZ1bwp00oHicL-A3-8uTlxf2IFXW_a5Y2HEE8VabFVauIwVfiDiiAOzuTgvkTJcrVyu2ueMlfh1xy1pqTFrL_4EG27pXtU85fLRWTVATLaTjZY-2UbUJG6ShemJGKma96btBufd61FUI9_Jb6ZQe9tvMJ2RKXMc8gBUBH52HW-g7LOW9B1jJlMjd5S6nhsciK1X9Aiox9J5IEwvva1jFdYt_qCrtCC7SsC"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Alex Chen</p>
+<p class="text-xs text-on-surface-variant truncate">Founder, Nexus AI</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="bg-surface-glass backdrop-blur-md border-b border-outline-glow shadow-sm fixed top-0 right-0 left-0 md:left-nav-width h-16 flex items-center justify-between px-gutter w-full z-40">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary hidden sm:block">Hipmipreneur AI</h2>
+</div>
+<div class="flex items-center gap-4">
+<!-- Search -->
+<div class="hidden lg:flex items-center bg-surface-container-high rounded-full px-4 py-1.5 border border-outline-glow focus-within:border-primary transition-colors w-64">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface text-sm w-full placeholder-on-surface-variant/50 p-0" placeholder="Search roadmap, resources..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-colors scale-95 active:scale-90 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full shadow-[0_0_5px_theme('colors.error')]"></span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">apps</span>
+</button>
+</div>
+<button class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-high border border-outline-glow text-primary hover:bg-surface-variant transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-sm">add</span>
+                Create New Venture
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-nav-width pt-16 relative z-10 flex flex-col h-screen overflow-hidden">
+<!-- Header Section -->
+<div class="px-margin py-6 border-b border-outline-glow bg-surface-dim/50 backdrop-blur-sm shrink-0">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 max-w-[1400px] mx-auto">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-xs font-bold uppercase tracking-wider">Deep Tech</span>
+<span class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant text-xs border border-outline-glow">Draft Mode</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface flex items-center gap-3">
+                        AI Lean Canvas
+                        <span class="material-symbols-outlined text-primary text-3xl animate-pulse" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">Refine your business model iteratively. IVA is analyzing inputs in real-time to identify blind spots and optimize for funding readiness.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg bg-surface-container border border-outline-glow text-on-surface hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">history</span>
+                        Version History
+                    </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-bold shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">ios_share</span>
+                        Export Pitch Deck
+                    </button>
+</div>
+</div>
+</div>
+<!-- Canvas Workspace & Sidebar Container -->
+<div class="flex-1 flex overflow-hidden w-full max-w-[1600px] mx-auto">
+<!-- The Lean Canvas Grid (Scrollable) -->
+<div class="flex-1 overflow-auto p-margin">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:grid-rows-2 gap-gutter min-w-[1000px] h-full pb-8">
+<!-- 1. Problem (Left Column, span 2 rows) -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-2 relative group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-error to-error-container rounded-t-xl opacity-70"></div>
+<div class="p-4 border-b border-outline-glow/50 flex justify-between items-center bg-surface-card/50 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg">1. Problem</h3>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+<div class="p-4 flex-1 space-y-3">
+<div class="bg-surface-container-low p-3 rounded border border-outline-glow/30">
+<p class="text-sm text-on-surface-variant">Inefficient data processing in edge computing environments limits real-time AI application capabilities.</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded border border-outline-glow/30">
+<p class="text-sm text-on-surface-variant">High latency and bandwidth costs when transmitting raw data to centralized cloud servers.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-glow/30">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase mb-2">Existing Alternatives</h4>
+<ul class="list-disc list-inside text-sm text-on-surface-variant space-y-1">
+<li>Traditional Cloud Processing</li>
+<li>Basic local heuristic filtering</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 2. Solution (Inner Left, Top Row) -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-1 relative">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-secondary-container rounded-t-xl opacity-70"></div>
+<div class="p-4 border-b border-outline-glow/50 flex justify-between items-center bg-surface-card/50 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg flex items-center gap-2">
+                                4. Solution
+                                <span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_5px_theme('colors.secondary')]"></span>
+</h3>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+<div class="p-4 flex-1">
+<p class="text-sm text-on-surface-variant">Proprietary quantum-inspired neural network architecture optimized for low-power edge microprocessors, enabling localized model inference.</p>
+</div>
+</div>
+<!-- 3. Key Metrics (Inner Left, Bottom Row) -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-1 relative">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tertiary to-tertiary-container rounded-t-xl opacity-70"></div>
+<div class="p-4 border-b border-outline-glow/50 flex justify-between items-center bg-surface-card/50 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg">8. Key Metrics</h3>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+<div class="p-4 flex-1">
+<ul class="text-sm text-on-surface-variant space-y-2">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-xs">speed</span> Inference Latency (ms)</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-xs">battery_charging_full</span> Power Consumption (mW)</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-xs">group_add</span> Pilot Program Adoption Rate</li>
+</ul>
+</div>
+</div>
+<!-- 4. Unique Value Proposition (Center Column, span 2 rows) - **ACTIVE STATE** -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-2 relative active-panel transform scale-[1.02] transition-transform z-10">
+<!-- Floating AI Suggestion -->
+<div class="absolute -top-8 -right-4 bg-surface-container-highest border border-primary px-3 py-2 rounded-lg shadow-[0_0_15px_rgba(128,131,255,0.3)] ai-float z-20 flex items-start gap-2 max-w-[200px]">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">lightbulb</span>
+<p class="text-xs text-on-surface">Strengthen UVP: Quantify the latency reduction vs AWS Greengrass.</p>
+</div>
+<div class="p-4 border-b border-primary/30 flex justify-between items-center bg-primary/10 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-primary text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                                2. Unique Value Prop
+                            </h3>
+<div class="flex gap-2">
+<button class="text-primary hover:text-on-primary-container bg-primary/20 p-1 rounded"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col justify-center text-center">
+<h4 class="font-display-lg text-2xl text-on-surface mb-4 leading-tight">Server-grade AI inference directly on the edge.</h4>
+<p class="text-sm text-on-surface-variant mb-6">Zero latency. Complete data privacy. 90% reduction in cloud bandwidth costs for IoT networks.</p>
+<div class="mt-auto p-3 bg-surface-dim/80 rounded border border-outline-glow border-dashed text-left">
+<h5 class="text-xs font-bold text-primary uppercase mb-1">High-Level Concept</h5>
+<p class="text-xs text-on-surface-variant italic">"It's like having a dedicated GPU server crammed into a matchbox-sized sensor."</p>
+</div>
+</div>
+</div>
+<!-- 5. Unfair Advantage (Inner Right, Top Row) -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-1 relative opacity-70 hover:opacity-100 transition-opacity">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-outline to-outline-variant rounded-t-xl opacity-70"></div>
+<div class="p-4 border-b border-outline-glow/50 flex justify-between items-center bg-surface-card/50 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-sm">lock</span>
+                                9. Unfair Advantage
+                            </h3>
+</div>
+<div class="p-4 flex-1 flex items-center justify-center">
+<p class="text-sm text-on-surface-variant/50 text-center italic">Pending patent filing for core algorithmic compression technique...</p>
+</div>
+</div>
+<!-- 6. Channels (Inner Right, Bottom Row) -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-1 relative">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-container rounded-t-xl opacity-70"></div>
+<div class="p-4 border-b border-outline-glow/50 flex justify-between items-center bg-surface-card/50 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg">5. Channels</h3>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<div class="p-4 flex-1 flex flex-wrap gap-2 content-start">
+<span class="px-2 py-1 rounded-full bg-surface-container-high border border-outline-glow text-xs text-on-surface-variant">B2B Direct Sales</span>
+<span class="px-2 py-1 rounded-full bg-surface-container-high border border-outline-glow text-xs text-on-surface-variant">Hardware OEM Partnerships</span>
+<span class="px-2 py-1 rounded-full bg-surface-container-high border border-outline-glow text-xs text-on-surface-variant">Developer APIs</span>
+</div>
+</div>
+<!-- 7. Customer Segments (Right Column, span 2 rows) -->
+<div class="glass-panel rounded-xl flex flex-col lg:col-span-1 lg:row-span-2 relative">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-container to-secondary rounded-t-xl opacity-70"></div>
+<div class="p-4 border-b border-outline-glow/50 flex justify-between items-center bg-surface-card/50 rounded-t-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface text-lg">3. Segments</h3>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+<div class="p-4 flex-1 space-y-4">
+<div>
+<h4 class="text-sm font-bold text-on-surface mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm">factory</span>
+                                    Industrial IoT
+                                </h4>
+<p class="text-xs text-on-surface-variant pl-6">Predictive maintenance sensors in manufacturing facilities.</p>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm">directions_car</span>
+                                    Autonomous Robotics
+                                </h4>
+<p class="text-xs text-on-surface-variant pl-6">Drones and warehouse AGVs requiring local navigation processing.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-glow/30">
+<h4 class="text-xs font-bold text-secondary uppercase mb-2">Early Adopters</h4>
+<p class="text-sm text-on-surface-variant bg-surface-container-low p-2 rounded">Tier 2 logistics providers struggling with cloud API costs for their fleet tracking.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- IVA Analysis Drawer (Right Sidebar) -->
+<aside class="w-80 bg-surface-glass border-l border-outline-glow backdrop-blur-xl flex flex-col shrink-0 relative z-20 shadow-[-10px_0_30px_rgba(0,0,0,0.5)]">
+<!-- Drawer Header -->
+<div class="p-4 border-b border-outline-glow flex items-center gap-3 bg-surface-card/80">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_theme('colors.primary')]">
+<span class="material-symbols-outlined text-surface-dim font-bold">smart_toy</span>
+</div>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-secondary rounded-full border-2 border-surface-card"></span>
+</div>
+<div>
+<h3 class="font-headline-md text-base font-bold text-on-surface leading-tight">IVA Analysis</h3>
+<p class="text-xs text-secondary animate-pulse">Real-time monitoring active</p>
+</div>
+</div>
+<!-- Canvas Health Score -->
+<div class="p-5 border-b border-outline-glow bg-surface-dim/30">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm text-on-surface-variant font-bold uppercase tracking-wider">Canvas Cohesion</span>
+<span class="text-2xl font-display-lg text-primary">78<span class="text-sm text-on-surface-variant">/100</span></span>
+</div>
+<!-- Progress Bar -->
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary w-[78%] rounded-full shadow-[0_0_10px_theme('colors.primary')]"></div>
+</div>
+<div class="mt-4 flex gap-2">
+<span class="px-2 py-1 rounded bg-error/20 text-error text-xs border border-error/30 flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">warning</span> Missing 'Unfair Advantage'
+                        </span>
+</div>
+</div>
+<!-- AI Chat / Feedback Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- AI Message -->
+<div class="flex gap-3">
+<div class="w-6 h-6 rounded bg-primary/20 flex items-center justify-center shrink-0 border border-primary/50">
+<span class="material-symbols-outlined text-primary text-[14px]">auto_awesome</span>
+</div>
+<div class="bg-surface-container-low rounded-lg rounded-tl-none p-3 border border-outline-glow text-sm text-on-surface">
+<p>I noticed you updated the <strong>Unique Value Proposition</strong>. It's much stronger now.</p>
+<p class="mt-2 text-on-surface-variant">However, your UVP emphasizes "Zero latency," but your <strong>Key Metrics</strong> don't track baseline latency against competitors. Should we add that?</p>
+<div class="mt-3 flex flex-col gap-2">
+<button class="text-xs px-3 py-1.5 bg-primary-container text-on-primary-container rounded hover:bg-primary transition-colors text-left font-bold">
+                                    + Add 'Comparative Latency (ms)' to Metrics
+                                </button>
+<button class="text-xs px-3 py-1.5 bg-surface-container-high text-on-surface-variant border border-outline-glow rounded hover:text-on-surface transition-colors text-left">
+                                    Ignore for now
+                                </button>
+</div>
+</div>
+</div>
+<!-- User Message (Simulated previous interaction) -->
+<div class="flex gap-3 flex-row-reverse">
+<div class="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-outline-glow">
+<img alt="User" class="w-full h-full object-cover" data-alt="A professional headshot of a confident tech founder in a well-lit studio. They have short dark hair, wear a sleek dark blazer over a crisp t-shirt, and offer a subtle, determined smile. The lighting is balanced, emphasizing a modern, approachable yet authoritative startup aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3N93jZJpaCD8Rr_FDbGjzBPCrJbgBiSnOerXKWSmT86yHvUuubDyLJa86k_0FFLTdJO0rBBkXkQaMIVJS2XgLV9pnjacnoIkLSZ7b7gUK7JFbiJ2qhHWCHc583nPd1rFFhFhdF3Bzgw6kJJanbdBrDBj5feNMAv3LoDFl-KUsydwYDeEtxDLSKwHPiEbzzP_gILGwJacxl_n4zGnpYhiXWNxEhdUqU0vIvCN-DIERwTjMlsCUt2NgimnowHJK-wOtxS3zdDirnWc7"/>
+</div>
+<div class="bg-surface-variant rounded-lg rounded-tr-none p-3 border border-outline-glow/50 text-sm text-on-surface-variant">
+<p>How does my customer segment align with the channel strategy?</p>
+</div>
+</div>
+<!-- AI Message -->
+<div class="flex gap-3">
+<div class="w-6 h-6 rounded bg-primary/20 flex items-center justify-center shrink-0 border border-primary/50">
+<span class="material-symbols-outlined text-primary text-[14px]">analytics</span>
+</div>
+<div class="bg-surface-container-low rounded-lg rounded-tl-none p-3 border border-outline-glow text-sm text-on-surface">
+<p>There's a slight disconnect. You listed "Hardware OEM Partnerships" under Channels, but your target segments (Industrial IoT, Drones) usually purchase complete systems, not just the edge computing module.</p>
+<a class="text-secondary text-xs hover:underline mt-2 inline-block" href="#">Read IVA's Deep Dive on Edge AI Go-To-Market →</a>
+</div>
+</div>
+</div>
+<!-- Chat Input Input -->
+<div class="p-4 border-t border-outline-glow bg-surface-card/90">
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-lowest border border-outline-glow rounded-full py-2 pl-4 pr-10 text-sm text-on-surface placeholder-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="Ask IVA to analyze or generate..." type="text"/>
+<button class="absolute right-2 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-surface-dim transition-colors">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

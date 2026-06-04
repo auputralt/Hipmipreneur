@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Data Insights - Hipmipreneur</title>
+<script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzc1NWNlZGQwMjI4ZTQ3NjJiMmJlODcwNDNkNTdhNmRkEgsSBxCxybefug0YAZIBJAoKcHJvamVjdF9pZBIWQhQxNzIwNTI1OTQ1NTk4NDEwMDg1Ng%26filename%3D%26opi%3D89354086&amp;app=ai.perplexity.comet&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-glow": "rgba(192, 193, 255, 0.2)",
+                    "surface-tint": "#c0c1ff",
+                    "on-error": "#690005",
+                    "glow-primary": "rgba(128, 131, 255, 0.4)",
+                    "outline-variant": "#464554",
+                    "surface-container-low": "#141b2c",
+                    "surface-deep": "#070d1f",
+                    "glow-secondary": "rgba(93, 230, 255, 0.6)",
+                    "surface-bright": "#32394c",
+                    "on-secondary-container": "#00515d",
+                    "inverse-surface": "#dce2fa",
+                    "secondary-fixed": "#a2eeff",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#07006c",
+                    "tertiary-container": "#8a8cc6",
+                    "surface-variant": "#2e3447",
+                    "on-primary-container": "#0d0096",
+                    "primary-fixed": "#e1e0ff",
+                    "inverse-on-surface": "#293042",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "primary": "#c0c1ff",
+                    "surface-dim": "#0c1324",
+                    "tertiary": "#c0c1ff",
+                    "on-surface-variant": "#c7c4d7",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "on-secondary": "#00363e",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed": "#e1e0ff",
+                    "outline": "#908fa0",
+                    "surface-container": "#181f31",
+                    "on-tertiary-fixed": "#131449",
+                    "surface-glass": "rgba(25, 31, 49, 0.4)",
+                    "on-secondary-fixed-variant": "#004e5a",
+                    "on-secondary-fixed": "#001f25",
+                    "on-tertiary": "#292b5e",
+                    "secondary": "#5de6ff",
+                    "on-surface": "#dce2fa",
+                    "surface-container-highest": "#2e3447",
+                    "on-tertiary-fixed-variant": "#404176",
+                    "surface-container-lowest": "#070e1e",
+                    "on-background": "#dce2fa",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "secondary-fixed-dim": "#2fd9f4",
+                    "secondary-container": "#00cbe6",
+                    "surface": "#0c1324",
+                    "on-primary": "#1000a9",
+                    "surface-container-high": "#232a3c",
+                    "on-tertiary-container": "#222457",
+                    "background": "#0c1324",
+                    "surface-card": "#191f31",
+                    "inverse-primary": "#494bd6",
+                    "primary-container": "#8083ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "80px",
+                    "base": "8px",
+                    "nav-width": "280px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "lg": "48px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "data-mono": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "data-mono": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #0c1324;
+            color: #dce2fa;
+            overflow-x: hidden;
+        }
+        
+        /* Ambient Glow Background */
+        .ambient-glow {
+            position: fixed;
+            top: 20%;
+            left: 30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(128, 131, 255, 0.15) 0%, rgba(12, 19, 36, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(120px);
+        }
+        .ambient-glow-secondary {
+            position: fixed;
+            bottom: 10%;
+            right: 10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(93, 230, 255, 0.1) 0%, rgba(12, 19, 36, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        /* Glass Panel Base */
+        .glass-panel {
+            background-color: rgba(25, 31, 49, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(192, 193, 255, 0.2);
+            border-radius: 0.75rem;
+        }
+
+        /* Scatter Plot Styles */
+        .scatter-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            cursor: crosshair;
+        }
+        .scatter-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            z-index: 10;
+            box-shadow: 0 0 15px currentColor;
+        }
+        
+        /* Chart Grid Lines */
+        .grid-line-h {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(144, 143, 160, 0.2);
+            border-top: 1px dashed rgba(144, 143, 160, 0.3);
+        }
+        .grid-line-v {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(144, 143, 160, 0.2);
+            border-left: 1px dashed rgba(144, 143, 160, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(12, 19, 36, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(192, 193, 255, 0.2);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(192, 193, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+<div class="ambient-glow"></div>
+<div class="ambient-glow-secondary"></div>
+<!-- SideNavBar (from JSON) -->
+<nav class="hidden md:flex bg-surface-glass text-primary font-body-md text-body-md fixed left-0 top-0 h-screen w-nav-width backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex-col py-margin px-base z-50">
+<!-- Header -->
+<div class="flex items-center gap-4 mb-10 px-4">
+<div class="w-12 h-12 rounded-full border-2 border-outline-glow overflow-hidden relative shadow-[0_0_15px_rgba(128,131,255,0.3)]">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional headshot of a modern executive in a dark, high-tech environment. The lighting is dramatic, with cool blue and purple hues accentuating the sleek, corporate aesthetic. The subject is focused and visionary, embodying the spirit of a forward-thinking venture builder." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVOidig8FiAzZMlEBFkSsPuz3qSEBhPa3znXlRZEtsT3W-nEIQRtuwdz4HB-rBb1VlEaoM6qJMlngsF3ImRISyyMe9MeZxX_INHfw7aaKAQ1sOqN-PEAgTDSEEOsJEe5eUN1btthdfrnKYhYbglTZXz07qXMFUXveZ5P3fli28_vdzUcitB7iBaPjeVQlBlUBSLvzJkmgeFHwJQvYnHGsPqBkD21vRxauxIcsHEfjWqKoYbynP7rWh3PZxc7TaoGOilc8Gq1nKl1cB"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Hipmipreneur</h1>
+<p class="text-sm text-secondary">Venture Hub</p>
+</div>
+</div>
+<!-- Main Nav Links -->
+<div class="flex flex-col gap-2 flex-grow">
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined transition-transform group-hover:scale-110" data-weight="fill" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined transition-transform group-hover:scale-110" data-weight="fill" style="font-variation-settings: 'FILL' 0;">account_tree</span>
+<span>Venture Roadmap</span>
+</a>
+<!-- Active (Market Intelligence is closest to Data Insights) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-l-4 border-primary bg-primary/10 shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1; text-shadow: 0 0 10px rgba(192,193,255,0.5);">insights</span>
+<span>Market Intelligence</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined transition-transform group-hover:scale-110" data-weight="fill" style="font-variation-settings: 'FILL' 0;">groups</span>
+<span>Team Builder</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined transition-transform group-hover:scale-110" data-weight="fill" style="font-variation-settings: 'FILL' 0;">payments</span>
+<span>Funding Radar</span>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="mt-auto flex flex-col gap-4">
+<button class="w-full py-3 px-4 bg-inverse-primary text-on-primary rounded-lg font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(73,75,214,0.4)] hover:shadow-[0_0_30px_rgba(73,75,214,0.6)] transition-all hover:-translate-y-0.5">
+<span class="material-symbols-outlined">smart_toy</span>
+                Ask IVA
+            </button>
+<div class="h-px w-full bg-outline-glow my-2"></div>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined text-sm">contact_support</span>
+<span class="text-sm">Support</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar (from JSON) -->
+<header class="hidden md:flex bg-surface-glass text-primary font-label-md text-label-md fixed top-0 right-0 left-nav-width h-16 backdrop-blur-md border-b border-outline-glow shadow-sm items-center justify-between px-gutter w-[calc(100%-280px)] z-40">
+<!-- Search (On Left) -->
+<div class="flex-1 max-w-md">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-high border border-outline-glow rounded-full py-2 pl-10 pr-4 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/50" placeholder="Search insights..." type="text"/>
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 rounded-full border border-primary/50 text-primary hover:bg-primary/10 transition-colors shadow-[inset_0_0_10px_rgba(192,193,255,0.1)]">
+                Create New Venture
+            </button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-colors scale-95 active:scale-90 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_5px_#5de6ff]"></span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full border border-outline-glow overflow-hidden ml-2 cursor-pointer hover:shadow-[0_0_10px_rgba(192,193,255,0.3)] transition-shadow">
+<img alt="Founders Profile" class="w-full h-full object-cover" data-alt="A small, professional headshot of an executive in a high-tech corporate setting, serving as a profile avatar. Deep blue tones and sharp lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV5ZBAT_Qo0IrDOHQxrUC3Dup6uoY1J50QdVFHbQoREU8AOd2unvkfDncrTBow7_DKLrgZEdYdoux9fWVkHp0SsT0uF8Fg2Q3riz6SR9v_LIEWkCgGOLZ3N67pXXwFh9JAg5eB6DOEd-c9l85z8LXFabaszLPuvzOiJZbBEapzOT1Dlzot6JCv-AfnrU6mLqakSsDkuG4nZTvA08AUyzwDglcLE54sweJBYwb8y6NkBhN7Cw0F6-jk0yarbXJjpBOZKYWBZmbiOjrf"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 w-full md:pl-nav-width pt-16 md:pt-24 px-4 md:px-margin pb-margin overflow-y-auto">
+<div class="max-w-4xl mx-auto w-full flex flex-col gap-gutter">
+<!-- Page Header & In-Page Nav -->
+<div class="flex flex-col gap-6 mb-4">
+<div>
+<div class="flex items-center gap-2 text-secondary mb-2 font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-sm">analytics</span>
+<span>DATA_INSIGHTS_COCKPIT //</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Market <span class="text-primary">Intelligence</span></h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">
+                        Synthesized qualitative and quantitative signals mapped to user intent vectors. Confidence intervals indicate predictive reliability.
+                    </p>
+</div>
+<!-- Sub-Navigation Tabs -->
+<div class="flex gap-2 border-b border-outline-glow pb-0">
+<button class="px-6 py-3 border-b-2 border-primary text-primary font-label-md text-label-md bg-primary/5 rounded-t-lg shadow-[inset_0_0_10px_rgba(192,193,255,0.05)] transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">work</span>
+                        Jobs-to-be-Done
+                    </button>
+<button class="px-6 py-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary hover:bg-surface-variant/30 rounded-t-lg transition-colors font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                        Triggers
+                    </button>
+<button class="px-6 py-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary hover:bg-surface-variant/30 rounded-t-lg transition-colors font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">flag</span>
+                        Desired Outcomes
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Card 1: The Matrix (Primary Focus) -->
+<div class="glass-panel p-6 flex flex-col lg:col-span-2 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50 z-0"></div>
+<div class="relative z-10 flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+                                Task Importance vs. Satisfaction
+                                <span class="material-symbols-outlined text-secondary text-sm cursor-help" title="Opportunity Landscape">info</span>
+</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Identify underserved needs where importance is high but satisfaction remains low.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-full border border-outline-glow">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_5px_#5de6ff] animate-pulse"></span>
+<span class="font-data-mono text-data-mono text-secondary">N=4,281 Signals</span>
+</div>
+</div>
+<!-- Scatter Plot Container -->
+<div class="relative h-[400px] w-full border-l border-b border-outline-glow mt-4 bg-surface-deep/30 rounded-br-lg">
+<!-- Axes Labels -->
+<div class="absolute -left-10 top-1/2 -translate-y-1/2 -rotate-90 font-data-mono text-data-mono text-on-surface-variant tracking-widest text-xs">IMPORTANCE</div>
+<div class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-data-mono text-data-mono text-on-surface-variant tracking-widest text-xs">SATISFACTION</div>
+<!-- Grid -->
+<div class="grid-line-h top-[25%]"></div>
+<div class="grid-line-h top-[50%]"></div>
+<div class="grid-line-h top-[75%]"></div>
+<div class="grid-line-v left-[25%]"></div>
+<div class="grid-line-v left-[50%]"></div>
+<div class="grid-line-v left-[75%]"></div>
+<!-- Quadrant Overlay (Underserved Needs) -->
+<div class="absolute top-0 left-0 w-[50%] h-[50%] bg-primary/5 border border-primary/20 rounded-tl-sm pointer-events-none">
+<div class="absolute top-4 left-4 font-label-md text-label-md text-primary/70">OPPORTUNITY ZONE</div>
+</div>
+<!-- Data Points -->
+<!-- High Imp, Low Sat (Target) -->
+<div class="scatter-point bg-secondary shadow-[0_0_10px_#5de6ff]" style="left: 20%; top: 15%;" title="Automate Reporting"></div>
+<div class="scatter-point bg-secondary shadow-[0_0_10px_#5de6ff]" style="left: 35%; top: 25%;" title="Data Integration"></div>
+<div class="scatter-point bg-secondary shadow-[0_0_10px_#5de6ff]" style="left: 15%; top: 40%;" title="Real-time Alerts"></div>
+<!-- Med/High Imp, High Sat -->
+<div class="scatter-point bg-outline" style="left: 80%; top: 30%;"></div>
+<div class="scatter-point bg-outline" style="left: 70%; top: 45%;"></div>
+<div class="scatter-point bg-outline" style="left: 90%; top: 10%;"></div>
+<!-- Low Imp, Low Sat -->
+<div class="scatter-point bg-outline/50" style="left: 30%; top: 80%;"></div>
+<div class="scatter-point bg-outline/50" style="left: 10%; top: 90%;"></div>
+<!-- Active Hover Point Context (Mockup of interaction) -->
+<div class="absolute top-[15%] left-[20%] translate-x-4 -translate-y-1/2 bg-surface-card border border-primary/30 p-3 rounded-lg shadow-lg z-20 backdrop-blur-md hidden group-hover:block">
+<div class="font-label-md text-label-md text-on-surface mb-1">Automate Reporting</div>
+<div class="flex gap-4 font-data-mono text-data-mono text-xs">
+<div><span class="text-on-surface-variant">Imp:</span> <span class="text-secondary">9.2</span></div>
+<div><span class="text-on-surface-variant">Sat:</span> <span class="text-error">3.1</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Top Opportunity Signal -->
+<div class="glass-panel p-6 flex flex-col relative group transition-all hover:border-primary/50 hover:shadow-[inset_0_0_15px_rgba(192,193,255,0.1)]">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">target</span>
+</div>
+<h4 class="font-label-md text-label-md text-primary">PRIORITY SIGNAL</h4>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-display-lg text-3xl text-secondary">86%</span>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">CONFIDENCE SCORE</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3 leading-tight">Fragmented Data Silos</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">
+                        Users consistently struggle to unify insights across disparate platforms, causing a lag in decision velocity.
+                    </p>
+<!-- Quote Box -->
+<div class="bg-surface-container-low border-l-2 border-secondary p-4 rounded-r-lg relative">
+<span class="material-symbols-outlined absolute top-2 right-2 text-outline-glow text-3xl opacity-30">format_quote</span>
+<p class="font-body-md text-body-md text-on-surface italic relative z-10">
+                            "I spend 4 hours every Monday just trying to stitch together the metrics from three different tools before our standup."
+                        </p>
+<div class="mt-2 flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden border border-outline-glow">
+<img alt="Interviewee Profile" class="w-full h-full object-cover" data-alt="A small avatar of a female professional in a tech environment, softly lit with cool tones, looking focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ4Lsnb05fRFW7FKarS7HU2MI6VhzaRPWQts3vYBP8dNuMQUNBdkvf9uvBgz2jSm5b9qSnsabCqKrpOWJOBtJgkwECmcUdt9TXNlDNawahaQjxg-QxBqCFAXYg26Z_-khQvA2JBF2kcp5LzZW_zXCigZ5QfZyWzzInWT6Erf8JCD9NK62KDUUFqp75C7Asi9IJ-fKPmrmhx5i7ngW84FvV6yrizAaah8tj2biLSy7VeLgD5PpMVYj6OSFkABAUWKnv_5CgnI9LXaCp"/>
+</div>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">Director of Ops, FinTech • Transcript #482</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Sentiment Vectors -->
+<div class="glass-panel p-6 flex flex-col relative transition-all hover:border-primary/50">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-6 uppercase tracking-wider">Sentiment Analysis</h4>
+<div class="flex flex-col gap-6 flex-grow">
+<!-- Metric 1 -->
+<div>
+<div class="flex justify-between font-data-mono text-data-mono text-sm mb-2">
+<span class="text-on-surface">Frustration with Current Tooling</span>
+<span class="text-error">High (72%)</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full relative" style="width: 72%;">
+<div class="absolute right-0 top-0 bottom-0 w-4 bg-white/30 blur-[2px]"></div>
+</div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div>
+<div class="flex justify-between font-data-mono text-data-mono text-sm mb-2">
+<span class="text-on-surface">Willingness to Switch</span>
+<span class="text-secondary">Strong (64%)</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full relative" style="width: 64%;">
+<div class="absolute right-0 top-0 bottom-0 w-4 bg-white/30 blur-[2px]"></div>
+</div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div>
+<div class="flex justify-between font-data-mono text-data-mono text-sm mb-2">
+<span class="text-on-surface">Price Sensitivity</span>
+<span class="text-primary">Moderate (45%)</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full relative" style="width: 45%;">
+</div>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full py-2 border border-outline-glow rounded-lg text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label-md text-label-md flex justify-center items-center gap-2">
+                        View Full Sentiment Report
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

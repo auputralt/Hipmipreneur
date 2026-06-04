@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hipmipreneur - Business Builder</title>
+<script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2ViZjFhZDQ0YjlhMjRiYTViNmQzMWZhYzM4N2Q2N2Y3EgsSBxCxybefug0YAZIBJAoKcHJvamVjdF9pZBIWQhQxNzIwNTI1OTQ1NTk4NDEwMDg1Ng%26filename%3D%26opi%3D89354086&amp;app=ai.perplexity.comet&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="fd0edc84f3774b12915b79c45f6" src="//local.adguard.org?ts=1780504585249&amp;name=AdGuard%20Extra&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-glow": "rgba(192, 193, 255, 0.2)",
+                        "surface-tint": "#c0c1ff",
+                        "on-error": "#690005",
+                        "glow-primary": "rgba(128, 131, 255, 0.4)",
+                        "outline-variant": "#464554",
+                        "surface-container-low": "#141b2c",
+                        "surface-deep": "#070d1f",
+                        "glow-secondary": "rgba(93, 230, 255, 0.6)",
+                        "surface-bright": "#32394c",
+                        "on-secondary-container": "#00515d",
+                        "inverse-surface": "#dce2fa",
+                        "secondary-fixed": "#a2eeff",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#07006c",
+                        "tertiary-container": "#8a8cc6",
+                        "surface-variant": "#2e3447",
+                        "on-primary-container": "#0d0096",
+                        "primary-fixed": "#e1e0ff",
+                        "inverse-on-surface": "#293042",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "primary": "#c0c1ff",
+                        "surface-dim": "#0c1324",
+                        "tertiary": "#c0c1ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-secondary": "#00363e",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#e1e0ff",
+                        "outline": "#908fa0",
+                        "surface-container": "#181f31",
+                        "on-tertiary-fixed": "#131449",
+                        "surface-glass": "rgba(25, 31, 49, 0.4)",
+                        "on-secondary-fixed-variant": "#004e5a",
+                        "on-secondary-fixed": "#001f25",
+                        "on-tertiary": "#292b5e",
+                        "secondary": "#5de6ff",
+                        "on-surface": "#dce2fa",
+                        "surface-container-highest": "#2e3447",
+                        "on-tertiary-fixed-variant": "#404176",
+                        "surface-container-lowest": "#070e1e",
+                        "on-background": "#dce2fa",
+                        "tertiary-fixed-dim": "#c0c1ff",
+                        "secondary-fixed-dim": "#2fd9f4",
+                        "secondary-container": "#00cbe6",
+                        "surface": "#0c1324",
+                        "on-primary": "#1000a9",
+                        "surface-container-high": "#232a3c",
+                        "on-tertiary-container": "#222457",
+                        "background": "#0c1324",
+                        "surface-card": "#191f31",
+                        "inverse-primary": "#494bd6",
+                        "primary-container": "#8083ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "base": "8px",
+                        "nav-width": "280px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "lg": "48px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .circuit-line {
+            background: linear-gradient(90deg, theme('colors.secondary') 0%, theme('colors.primary') 50%, theme('colors.surface-container-high') 100%);
+        }
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(192, 193, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(192, 193, 255, 0.05) 1px, transparent 1px);
+        }
+        .ambient-blur {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, rgba(128, 131, 255, 0.05) 0%, rgba(12, 19, 36, 0) 70%);
+            filter: blur(120px);
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-surface-dim text-on-surface font-body-md min-h-screen overflow-x-hidden flex selection:bg-primary-container selection:text-on-primary-container">
+<div class="ambient-blur"></div>
+<div class="fixed inset-0 bg-grid-pattern z-[-1] pointer-events-none"></div>
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface-glass text-primary font-body-md fixed left-0 top-0 h-screen w-nav-width backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex-col py-margin px-base z-50">
+<div class="mb-lg px-base">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Hipmipreneur</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Venture Hub</p>
+</div>
+<ul class="flex-1 space-y-sm">
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:shadow-[0_0_15px_rgba(192,193,255,0.4)] rounded-full transition-shadow" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-primary font-bold border-l-4 border-primary bg-primary/10 shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined shadow-[0_0_15px_rgba(192,193,255,0.4)] rounded-full" data-icon="account_tree" data-weight="fill">account_tree</span>
+<span class="font-label-md text-label-md">Venture Roadmap</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:shadow-[0_0_15px_rgba(192,193,255,0.4)] rounded-full transition-shadow" data-icon="insights">insights</span>
+<span class="font-label-md text-label-md">Market Intelligence</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:shadow-[0_0_15px_rgba(192,193,255,0.4)] rounded-full transition-shadow" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Team Builder</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:shadow-[0_0_15px_rgba(192,193,255,0.4)] rounded-full transition-shadow" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Funding Radar</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto space-y-md">
+<button class="w-full py-sm px-base bg-inverse-primary text-on-primary rounded-lg font-label-md text-label-md shadow-[0_0_20px_rgba(73,75,214,0.6)] hover:shadow-[0_0_30px_rgba(73,75,214,0.8)] transition-all duration-300 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+                Ask IVA
+            </button>
+<ul class="space-y-sm border-t border-outline-glow pt-md">
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-base py-sm rounded-lg text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</li>
+</ul>
+<div class="flex items-center gap-sm px-base mt-md">
+<img alt="User profile" class="w-10 h-10 rounded-full border border-outline-glow object-cover" data-alt="A professional headshot of a confident tech founder with modern lighting, set against a dark glassmorphic background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw8EysYK-shWauboA8tnkl_LZPjzKBM0PBXl39aQDSI9sHuzJPWXeQk8geI3WZ6NT-kwcVEgkpPr4ak3ZzdJ6gBVNRw39WCrcr3q9auJZ3zfPhQjlI2Geapw5PNNLnDF3f9fvx7n2A_TdDIeTNoalP-CgGYHdfT-SzLX86nBxORxujF0Umb4DlbRfAV8zKY9aQB0isk0YbJ5NWVNVCRbsjA93dsPrwTjqpVjhaljjd-bwkq6BebPlEHJkQhg9tqGpsrhy0lPQhF_yh"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md text-on-surface truncate">Alex Chen</p>
+<p class="font-data-mono text-data-mono text-on-surface-variant text-[10px] truncate">Founder</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="hidden md:flex bg-surface-glass text-primary font-label-md text-label-md fixed top-0 right-0 left-nav-width h-16 backdrop-blur-md border-b border-outline-glow shadow-sm items-center justify-between px-gutter z-40">
+<div class="flex items-center">
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary hidden lg:block mr-lg">Hipmipreneur AI</h2>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors" data-icon="search">search</span>
+<input class="bg-surface-container-high border-outline-glow text-on-surface rounded-full pl-10 pr-sm py-2 w-64 focus:ring-1 focus:ring-primary focus:border-primary transition-all font-body-md text-sm placeholder-on-surface-variant/50" placeholder="Search roadmap, insights..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors shadow-[inset_0_0_10px_rgba(255,255,255,0.2)]">
+                Create New Venture
+            </button>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-variant/50 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-variant/50 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+</div>
+<img alt="Founders Profile" class="w-8 h-8 rounded-full border border-outline-glow cursor-pointer hover:border-primary transition-colors" data-alt="A professional headshot of a confident tech founder with modern lighting, set against a dark glassmorphic background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo4X5Uya7_OLmiYEDjDuIobR70I70zZ_7eFN4XyxQUdY-QZHkGls5EDkyzKLu5Ka962WMyo3esIlKef71C3gfO-Ocul49fFNDoBRR4I8oyviQ62qNpEtjXnTnZi7rovA_gRC1PZnO42aJjynPYbYXcHdFsMeWCu-Z4Y2BEcRwAuxXL-xiyyMZT7usec8vK8hzti9OPNzfIqEU-HDEtLVkkhFAgGAKMcTpeySulRPrgv-OfVBKtwaTf0P1S75O-aP0DcJdQ_jLreAmE"/>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 ml-0 md:ml-nav-width mt-16 p-margin lg:p-xl flex flex-col xl:flex-row gap-gutter h-[calc(100vh-64px)] overflow-hidden">
+<!-- Left/Center: Roadmap & Task Area -->
+<div class="flex-1 flex flex-col gap-gutter min-w-0 h-full">
+<!-- Circuit Board Header / Breadcrumb -->
+<div class="bg-surface-card rounded-xl p-md border border-outline-glow shadow-[inset_0_0_15px_rgba(192,193,255,0.05)] backdrop-blur-sm shrink-0">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-headline-md text-headline-md text-primary font-bold">Phase 1: Foundation</h3>
+<span class="bg-secondary-container/20 text-secondary border border-secondary/30 px-3 py-1 rounded-full font-data-mono text-data-mono text-xs">Active Flow</span>
+</div>
+<div class="relative flex items-center mt-lg h-12">
+<div class="absolute left-0 right-0 h-0.5 circuit-line top-1/2 -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex justify-between w-full px-sm">
+<!-- Node 1: Completed -->
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-6 h-6 rounded-md bg-surface-container-high border-2 border-primary flex items-center justify-center shadow-[0_0_10px_rgba(192,193,255,0.3)] group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="check">check</span>
+</div>
+<span class="font-label-md text-[10px] text-on-surface-variant group-hover:text-primary transition-colors absolute -bottom-6 whitespace-nowrap">Problem Definition</span>
+</div>
+<!-- Node 2: Active -->
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-8 h-8 rounded-md bg-surface-card border-2 border-secondary flex items-center justify-center shadow-[0_0_20px_rgba(93,230,255,0.6)] animate-pulse group-hover:scale-110 transition-transform relative z-20">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="target" data-weight="fill">target</span>
+</div>
+<span class="font-label-md text-[12px] text-secondary font-bold absolute -bottom-6 whitespace-nowrap">Customer Segments</span>
+</div>
+<!-- Node 3: Locked -->
+<div class="flex flex-col items-center gap-xs cursor-pointer group opacity-50">
+<div class="w-6 h-6 rounded-md bg-surface-container-lowest border-2 border-dashed border-outline-variant flex items-center justify-center group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="lock">lock</span>
+</div>
+<span class="font-label-md text-[10px] text-outline-variant absolute -bottom-6 whitespace-nowrap">Value Prop</span>
+</div>
+<!-- Node 4: Locked -->
+<div class="flex flex-col items-center gap-xs cursor-pointer group opacity-50">
+<div class="w-6 h-6 rounded-md bg-surface-container-lowest border-2 border-dashed border-outline-variant flex items-center justify-center group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[14px] text-outline-variant" data-icon="lock">lock</span>
+</div>
+<span class="font-label-md text-[10px] text-outline-variant absolute -bottom-6 whitespace-nowrap">Market Sizing</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Task Canvas -->
+<div class="flex-1 bg-surface-glass rounded-xl border border-outline-glow shadow-[inset_0_0_20px_rgba(192,193,255,0.05)] backdrop-blur-md overflow-hidden flex flex-col min-h-0">
+<div class="h-1 bg-gradient-to-r from-secondary via-primary to-primary-container w-full"></div>
+<div class="p-lg flex-1 overflow-y-auto custom-scrollbar">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="target" data-weight="fill">target</span>
+<h2 class="font-display-lg text-display-lg text-on-surface">Identify Customer Segments</h2>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Define the specific groups of people or organizations you aim to reach and serve. Precision here drives product focus.</p>
+</div>
+<button class="flex items-center gap-xs bg-surface-variant hover:bg-surface-bright text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md transition-colors border border-outline-variant">
+<span class="material-symbols-outlined text-[18px]" data-icon="play_arrow">play_arrow</span>
+                             Start Guided Flow
+                        </button>
+</div>
+<!-- Glassmorphic Editor Area -->
+<div class="mt-xl bg-surface-container-lowest/50 rounded-xl border border-outline-glow/50 p-md min-h-[300px] shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-sm border-b border-outline-glow/30 pb-sm mb-sm text-on-surface-variant">
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="format_bold">format_bold</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="format_italic">format_italic</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="format_list_bulleted">format_list_bulleted</span></button>
+<div class="w-px h-4 bg-outline-variant mx-1"></div>
+<button class="p-1 hover:text-primary transition-colors flex items-center gap-xs font-label-md text-xs"><span class="material-symbols-outlined text-[18px]" data-icon="magic_button">magic_button</span> Auto-Format</button>
+</div>
+<div class="font-body-md text-on-surface outline-none w-full h-full" contenteditable="true" placeholder="Start outlining your segments here...">
+<h3 class="font-headline-md text-primary mb-2">Segment A: Urban Millennials</h3>
+<ul class="list-disc pl-5 mb-4 text-on-surface-variant">
+<li>Ages 25-35, living in metro areas.</li>
+<li>High disposable income, value convenience.</li>
+</ul>
+<p class="text-outline-variant italic">Add more details...</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: AI Suggestions -->
+<aside class="w-full xl:w-80 flex flex-col gap-sm shrink-0 h-full overflow-hidden">
+<div class="bg-surface-glass rounded-xl border border-outline-glow p-md backdrop-blur-md flex items-center justify-between shrink-0">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary-container animate-pulse" data-icon="hub">hub</span>
+<h3 class="font-label-md text-label-md text-on-surface font-bold tracking-wide">IVA Suggestions</h3>
+</div>
+<span class="bg-tertiary-container/20 text-tertiary border border-tertiary/30 px-2 py-0.5 rounded text-[10px] font-data-mono">Live</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar space-y-md pr-2">
+<!-- Synthetic Persona Card 1 -->
+<div class="bg-surface-card rounded-xl border border-outline-glow/50 p-md hover:border-primary transition-colors group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-full z-0 group-hover:bg-primary/20 transition-colors"></div>
+<div class="relative z-10">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Persona Avatar" class="w-full h-full object-cover opacity-80 mix-blend-luminosity" data-alt="A stylized, slightly abstract portrait of a young female professional, rendered in a cool, tech-noir aesthetic with subtle blue lighting to represent a synthetic AI-generated persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_gA7Wt4DDa_4WV-7bmeCPRDFKAfUxnRvVMtHR_XW0sWdEmBVdVpt3Jwr8L9330Cvjsf_-IKVZJD-YFXDp69iAo1H8Oi_bS536lVAw0kcSKwCFaD7HghOd7PEzA8Kn-doaWXp4k8kfGoFZHFf2dy7zAfSz8CacQKlU-E2nJ8bpUUPbTO_7HsX8xGFcqS6GEg2awjNddBuxC1unzkjF_K6ai8VrK8ifPXFd9bLmVngmvKB3vUMjzHDnphrY7S9qUzAbBF6iT0HwM6h0"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">"The Optimization Pro"</h4>
+<p class="font-data-mono text-[10px] text-on-surface-variant">B2B SaaS Buyer</p>
+</div>
+</div>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant mb-sm line-clamp-3">Mid-level managers seeking workflow automation. Price-sensitive but highly values integration capabilities.</p>
+<div class="flex gap-2 mb-md flex-wrap">
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded text-xs border border-outline-variant/50">Efficiency</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded text-xs border border-outline-variant/50">Tech-Savvy</span>
+</div>
+<button class="w-full bg-surface-container-high hover:bg-primary/20 text-primary border border-primary/30 rounded-lg py-2 font-label-md text-sm transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span> Add to Canvas
+                        </button>
+</div>
+</div>
+<!-- Synthetic Persona Card 2 -->
+<div class="bg-surface-card rounded-xl border border-outline-glow/50 p-md hover:border-secondary transition-colors group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary/10 rounded-bl-full z-0 group-hover:bg-secondary/20 transition-colors"></div>
+<div class="relative z-10">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Persona Avatar" class="w-full h-full object-cover opacity-80 mix-blend-luminosity" data-alt="A stylized, slightly abstract portrait of an older male executive, rendered in a cool, tech-noir aesthetic with subtle blue lighting to represent a synthetic AI-generated persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPRAUc2-JP_9KaV2a4dBcp7NfPQcwLRtNhKimvDJpHtm42TTQwlnUNroh0rLdZzVBRzgggngk2x86tN6ud2KBr8Te6qvZFoBgFXA8WkRluVrvc9rTwz5vH4kIajporcew4CkFdCV6yt7pnZ29aYE25nhAYvkgtOLMXMsA6tXO1kFxiQDCF9IcYqXkrEbX91cILelqggIn7ximAJD44FQOSqX_QzZkUDJJyO4kh78ZsRn0-L_CSMS5a5dgp9-liv9THsLqS6kSW6rJe"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">"The Scaling Founder"</h4>
+<p class="font-data-mono text-[10px] text-on-surface-variant">Post-Seed Startup</p>
+</div>
+</div>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant mb-sm line-clamp-3">Focuses on rapid growth metrics. Less price-sensitive if ROI is clear within 3 months. Needs priority support.</p>
+<div class="flex gap-2 mb-md flex-wrap">
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded text-xs border border-outline-variant/50">High Growth</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded text-xs border border-outline-variant/50">ROI Driven</span>
+</div>
+<button class="w-full bg-surface-container-high hover:bg-secondary/20 text-secondary border border-secondary/30 rounded-lg py-2 font-label-md text-sm transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span> Add to Canvas
+                        </button>
+</div>
+</div>
+<!-- Data Insight Snippet -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-glow/30 p-md backdrop-blur-sm">
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-outline text-[16px]" data-icon="bar_chart">bar_chart</span>
+<span class="font-label-md text-xs text-outline">Market Signal</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant">Searches for "workflow automation tools for small teams" have increased 45% YoY in your target region.</p>
+</div>
+</div>
+</aside>
+</main>
+<style>
+        /* Custom Scrollbar for inner areas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(12, 19, 36, 0.5);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(192, 193, 255, 0.2);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(192, 193, 255, 0.4);
+        }
+        
+        [contenteditable]:empty:before {
+            content: attr(placeholder);
+            color: theme('colors.outline-variant');
+            font-style: italic;
+            cursor: text;
+        }
+    </style>
+</body></html>
