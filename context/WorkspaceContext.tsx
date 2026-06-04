@@ -475,7 +475,20 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [userProfile] = useState<UserProfile>(DEFAULT_USER);
   const [startingPath, setStartingPath] = useState<string | null>("Grow my business");
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(true);
-  const [completedTasks, setCompletedTasks] = useState<string[]>(["canvas-builder-1", "canvas-builder-2"]);
+  const [completedTasksRecord, setCompletedTasksRecord] = useState<Record<string, string[]>>({
+    "ws-nexus": [
+      "canvas-builder-1",
+      "canvas-builder-2",
+      "canvas-builder-3",
+      "validation-real-1",
+      "validation-real-2",
+      "validation-real-3",
+      "gtm-assets-1",
+      "gtm-assets-2",
+      "gtm-assets-3"
+    ],
+    "ws-dummy": []
+  });
 
   // Core validation loop state additions
   const [canvasData, setCanvasData] = useState<Record<string, LeanCanvas>>(SEED_CANVASES);
@@ -491,14 +504,14 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [salesDecks, setSalesDecks] = useState<Record<string, SalesDeckAsset[]>>(SEED_SALES_DECKS);
   const [subscriptionPlans, setSubscriptionPlans] = useState<Record<string, string>>({ "ws-nexus": "Growth", "ws-dummy": "Free Trial" });
 
-  // Calculate health dynamically based on completed tasks on-the-fly
-  const derivedWorkspaces = workspaces.map((ws) =>
-    ws.id === activeWorkspaceId
-      ? { ...ws, healthScore: Math.min(15 + completedTasks.length * 10, 100) }
-      : ws
-  );
+  // Calculate health dynamically based on completed tasks on-the-fly for all workspaces
+  const derivedWorkspaces = workspaces.map((ws) => {
+    const wsTasks = completedTasksRecord[ws.id] || [];
+    return { ...ws, healthScore: Math.min(15 + wsTasks.length * 10, 100) };
+  });
 
   const activeWorkspace = derivedWorkspaces.find((w) => w.id === activeWorkspaceId);
+  const completedTasks = completedTasksRecord[activeWorkspaceId] || [];
 
   const createWorkspace = (name: string, description: string, type: string): Workspace => {
     const newId = `ws-${Math.random().toString(36).substring(2, 11)}`;
@@ -516,7 +529,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setWorkspaces((prev) => [...prev, newWorkspace]);
     setActiveWorkspaceId(newId);
     setStartingPath(type);
-    setCompletedTasks([]);
+    setCompletedTasksRecord((prev) => ({ ...prev, [newId]: [] }));
     setOnboardingCompleted(false);
 
     // Initialize blank canvas data
@@ -564,13 +577,26 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   const completeTask = (taskId: string) => {
-    if (!completedTasks.includes(taskId)) {
-      setCompletedTasks((prev) => [...prev, taskId]);
-    }
+    setCompletedTasksRecord((prev) => {
+      const current = prev[activeWorkspaceId] || [];
+      if (!current.includes(taskId)) {
+        return {
+          ...prev,
+          [activeWorkspaceId]: [...current, taskId]
+        };
+      }
+      return prev;
+    });
   };
 
   const uncompleteTask = (taskId: string) => {
-    setCompletedTasks((prev) => prev.filter((id) => id !== taskId));
+    setCompletedTasksRecord((prev) => {
+      const current = prev[activeWorkspaceId] || [];
+      return {
+        ...prev,
+        [activeWorkspaceId]: current.filter((id) => id !== taskId)
+      };
+    });
   };
 
   const completeOnboarding = () => {

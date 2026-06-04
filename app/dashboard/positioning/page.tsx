@@ -225,7 +225,7 @@ ${currentDoc.elevatorPitch}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-full min-h-0 items-start">
             
             {/* Left Column: Navigator & Sidebar (3/12) */}
-            <div className="lg:col-span-3 flex flex-col gap-4 sticky top-0">
+            <div className="lg:col-span-3 flex flex-col gap-4 lg:sticky lg:top-4">
               <div className="glass-panel border border-outline-glow rounded-xl p-4 flex flex-col gap-2">
                 <span className="font-mono text-[9px] text-on-surface-variant/50 uppercase tracking-widest border-b border-outline-glow/20 pb-2 mb-1">
                   Daftar Konten Panduan

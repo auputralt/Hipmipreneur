@@ -315,8 +315,8 @@ export default function SettingsPage() {
 
       {/* Midtrans Snap Modal Overlay */}
       {snapOpen && checkoutItem && (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans text-xs">
-          <div className="bg-[#141b2c] border border-outline-glow/50 rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col md:flex-row h-[420px] relative text-[#dce2fa]">
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans text-xs md:pl-[280px]">
+          <div className="bg-[#141b2c] border border-outline-glow/50 rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col md:flex-row h-auto md:h-[420px] relative text-[#dce2fa]">
             
             {/* Modal Exit */}
             <button
@@ -531,7 +531,7 @@ export default function SettingsPage() {
 
       {/* Confirmation Toast Popup */}
       {paymentSuccessOpen && (
-        <div className="fixed inset-0 bg-surface-deep/85 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans">
+        <div className="fixed inset-0 bg-surface-deep/85 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-sm w-full p-6 text-center flex flex-col items-center gap-4 text-[#dce2fa]">
             <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center text-secondary border border-secondary/40 shadow-[0_0_20px_rgba(93,230,255,0.4)]">
               <span className="material-symbols-outlined text-2xl font-bold">check</span>

@@ -6,7 +6,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useWorkspace } from "../context/WorkspaceContext";
 
-export const SideNavBar: React.FC = () => {
+interface SideNavBarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export const SideNavBar: React.FC<SideNavBarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
   const { userProfile } = useWorkspace();
 
@@ -62,17 +67,24 @@ export const SideNavBar: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed left-0 top-0 h-screen w-[280px] bg-surface-glass backdrop-blur-md border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex flex-col py-6 px-3 z-50 hidden md:flex">
+    <nav className={`fixed left-0 top-0 h-screen w-[280px] bg-surface-glass backdrop-blur-xl border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex flex-col py-6 px-3 z-50 transition-transform duration-300 md:translate-x-0 ${isOpen ? "translate-x-0 animate-panel" : "-translate-x-full"} flex`}>
       {/* Brand Header */}
-      <div className="flex items-center justify-start mb-6 px-3 h-12 shrink-0">
+      <div className="flex items-center justify-between mb-6 px-3 h-12 shrink-0">
         <Image
           src="/Logo/Transpart.png"
           alt="Hipmipreneur Logo"
           width={160}
           height={48}
           className="object-contain filter drop-shadow-[0_0_8px_rgba(192,193,255,0.4)]"
-          style={{ width: "auto", height: "100%" }}
+          style={{ width: "auto", height: "auto" }}
+          priority
         />
+        <button
+          onClick={onClose}
+          className="md:hidden text-on-surface-variant hover:text-primary p-1.5 rounded-lg hover:bg-surface-variant/40 transition-colors cursor-pointer flex items-center justify-center"
+        >
+          <span className="material-symbols-outlined text-[20px]">close</span>
+        </button>
       </div>
 
       {/* Main Navigation - Scrollable */}
@@ -89,6 +101,7 @@ export const SideNavBar: React.FC = () => {
                   <li key={itemIdx}>
                     <Link
                       href={item.path}
+                      onClick={onClose}
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 border-l-4 ${
                         active
                           ? "text-primary font-semibold border-primary bg-primary/10 shadow-[inset_0_0_10px_rgba(192,193,255,0.1)]"

@@ -294,7 +294,7 @@ export default function GetStartedPage() {
 
         {/* Right Column: IVA Assistant Sidebar (4/12) */}
         <aside className="lg:col-span-4 flex flex-col gap-4">
-          <div className="glass-panel rounded-xl p-5 border border-outline-glow flex flex-col gap-4 sticky top-4">
+          <div className="glass-panel rounded-xl p-5 border border-outline-glow flex flex-col gap-4 lg:sticky lg:top-4">
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-outline-glow/30 pb-3">
               <div className="relative">

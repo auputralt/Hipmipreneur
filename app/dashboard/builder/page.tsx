@@ -261,7 +261,7 @@ export default function BuilderPage() {
         </div>
 
         {/* Right Area: IVA Advice (4/12) */}
-        <aside className="lg:col-span-4 flex flex-col gap-4 sticky top-4">
+        <aside className="lg:col-span-4 flex flex-col gap-4 lg:sticky lg:top-4">
           <div className="glass-panel border border-outline-glow rounded-xl p-5 flex flex-col gap-4">
             {/* Title */}
             <div className="flex items-center gap-2.5 border-b border-outline-glow/30 pb-3">

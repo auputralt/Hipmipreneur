@@ -144,7 +144,7 @@ ${canvas.unfairAdvantage}
   return (
     <div className="px-6 py-6 max-w-[1500px] mx-auto w-full flex flex-col gap-5 h-full relative">
       {/* Header */}
-      <header className="flex justify-between items-center border-b border-outline-glow/30 pb-4">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-outline-glow/30 pb-4">
         <div>
           <div className="flex items-center gap-2 text-secondary mb-1 font-mono text-[9px] tracking-wider uppercase">
             <span className="material-symbols-outlined text-[10px]">view_quilt</span>
@@ -167,7 +167,7 @@ ${canvas.unfairAdvantage}
       {/* Workspace Area split */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 flex-1 min-h-0">
         {/* Left Column: Chat with IVA (4/12) */}
-        <div className="xl:col-span-4 flex flex-col glass-panel rounded-xl overflow-hidden border border-outline-glow h-[600px] xl:h-[calc(100vh-170px)]">
+        <div className="xl:col-span-4 flex flex-col glass-panel rounded-xl overflow-hidden border border-outline-glow h-[500px] xl:h-[calc(100vh-170px)]">
           <div className="bg-surface-container-high/60 border-b border-outline-glow/30 px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg">
@@ -244,13 +244,13 @@ ${canvas.unfairAdvantage}
         </div>
 
         {/* Right Column: Lean Canvas Grid (8/12) */}
-        <div className="xl:col-span-8 flex flex-col h-[600px] xl:h-[calc(100vh-170px)]">
+        <div className="xl:col-span-8 flex flex-col h-auto xl:h-[calc(100vh-170px)]">
           {canvas ? (
-            <div className="grid grid-cols-10 grid-rows-3 gap-2.5 h-full min-h-0 text-xs">
+            <div className="grid grid-cols-1 lg:grid-cols-10 lg:grid-rows-3 gap-2.5 h-full min-h-0 text-xs overflow-y-auto lg:overflow-y-visible">
               {/* Problem Section */}
               <div
                 onClick={() => startEdit("problem")}
-                className="col-span-2 row-span-2 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
+                className="col-span-1 lg:col-span-2 lg:row-span-2 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
               >
                 <div className="flex justify-between items-center text-[10px] font-bold text-secondary uppercase font-mono">
                   <span>1. Masalah (Problem)</span>
@@ -262,7 +262,7 @@ ${canvas.unfairAdvantage}
               </div>
 
               {/* Solution & Metrics Column */}
-              <div className="col-span-2 row-span-2 flex flex-col gap-2.5 min-h-0">
+              <div className="col-span-1 lg:col-span-2 lg:row-span-2 flex flex-col gap-2.5 min-h-0">
                 {/* Solution */}
                 <div
                   onClick={() => startEdit("solution")}
@@ -294,7 +294,7 @@ ${canvas.unfairAdvantage}
               {/* UVP Section */}
               <div
                 onClick={() => startEdit("uvp")}
-                className="col-span-2 row-span-2 glass-panel hover:border-primary/70 hover:shadow-[0_0_15px_rgba(192,193,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar border-primary/30"
+                className="col-span-1 lg:col-span-2 lg:row-span-2 glass-panel hover:border-primary/70 hover:shadow-[0_0_15px_rgba(192,193,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar border-primary/30"
               >
                 <div className="flex justify-between items-center text-[10px] font-bold text-primary uppercase font-mono">
                   <span>3. UVP (Proporsi Nilai)</span>
@@ -306,7 +306,7 @@ ${canvas.unfairAdvantage}
               </div>
 
               {/* Unfair Advantage & Channels Column */}
-              <div className="col-span-2 row-span-2 flex flex-col gap-2.5 min-h-0">
+              <div className="col-span-1 lg:col-span-2 lg:row-span-2 flex flex-col gap-2.5 min-h-0">
                 {/* Unfair Advantage */}
                 <div
                   onClick={() => startEdit("unfairAdvantage")}
@@ -338,7 +338,7 @@ ${canvas.unfairAdvantage}
               {/* Customer Segments Section */}
               <div
                 onClick={() => startEdit("customerSegments")}
-                className="col-span-2 row-span-2 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
+                className="col-span-1 lg:col-span-2 lg:row-span-2 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
               >
                 <div className="flex justify-between items-center text-[10px] font-bold text-secondary uppercase font-mono">
                   <span>2. Segmen (Segments)</span>
@@ -352,7 +352,7 @@ ${canvas.unfairAdvantage}
               {/* Cost Structure (Bottom Left) */}
               <div
                 onClick={() => startEdit("costStructure")}
-                className="col-span-5 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
+                className="col-span-1 lg:col-span-5 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
               >
                 <div className="flex justify-between items-center text-[10px] font-bold text-secondary uppercase font-mono">
                   <span>6. Struktur Biaya (Cost Structure)</span>
@@ -366,7 +366,7 @@ ${canvas.unfairAdvantage}
               {/* Revenue Streams (Bottom Right) */}
               <div
                 onClick={() => startEdit("revenueStreams")}
-                className="col-span-5 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
+                className="col-span-1 lg:col-span-5 glass-panel hover:border-secondary/70 hover:shadow-[0_0_15px_rgba(93,230,255,0.15)] rounded-xl p-3 flex flex-col gap-2 transition-all cursor-pointer overflow-y-auto custom-scrollbar"
               >
                 <div className="flex justify-between items-center text-[10px] font-bold text-secondary uppercase font-mono">
                   <span>7. Aliran Pendapatan (Revenue Streams)</span>
@@ -391,7 +391,7 @@ ${canvas.unfairAdvantage}
 
       {/* Editing Dialog Modal */}
       {editingSection && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-lg w-full p-6 relative">
             <button
               onClick={() => setEditingSection(null)}

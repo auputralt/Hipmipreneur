@@ -228,7 +228,7 @@ export default function InterviewsPage() {
 
       {/* MODAL 1: Synthetic Interview Simulation */}
       {simulationModalOpen && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-hidden">
             {/* Header / Loading Overlay */}
             {isSimulating ? (
@@ -321,7 +321,7 @@ export default function InterviewsPage() {
 
       {/* MODAL 2: Upload Raw Transcript */}
       {uploadModalOpen && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-lg w-full p-6 relative">
             <button
               onClick={() => setUploadModalOpen(false)}
@@ -337,7 +337,7 @@ export default function InterviewsPage() {
               Masukkan hasil transkrip percakapan langsung Anda dengan calon pembeli luar untuk dianalisis oleh IVA.
             </p>
             <form onSubmit={handleUploadTranscript} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-on-surface mb-1">Nama Responden *</label>
                   <input
@@ -408,7 +408,7 @@ export default function InterviewsPage() {
 
       {/* MODAL 3: Transcript Viewer Dialog */}
       {selectedInterview && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-2xl w-full p-6 relative flex flex-col h-[550px] overflow-hidden">
             <button
               onClick={() => setSelectedInterview(null)}

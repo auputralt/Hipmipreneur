@@ -205,7 +205,7 @@ ${currentPersona.messagingAngles.map(item => `- ${item}`).join("\n")}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 h-full min-h-0">
             
             {/* Left Box: Persona Core Card (4/12) */}
-            <div className="lg:col-span-4 glass-panel border border-outline-glow rounded-xl p-5 flex flex-col gap-4 overflow-y-auto max-h-[600px] lg:max-h-[calc(100vh-170px)] sticky top-0">
+            <div className="lg:col-span-4 glass-panel border border-outline-glow rounded-xl p-5 flex flex-col gap-4 overflow-y-auto max-h-[600px] lg:max-h-[calc(100vh-170px)] lg:sticky lg:top-4">
               {/* Profile Avatar Card */}
               <div className="flex flex-col items-center text-center gap-3 border-b border-outline-glow/20 pb-4">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-[0_0_20px_rgba(192,193,255,0.3)] bg-surface-container relative">
@@ -395,7 +395,7 @@ ${currentPersona.messagingAngles.map(item => `- ${item}`).join("\n")}
 
       {/* Edit Modal */}
       {editModalOpen && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setEditModalOpen(false)}

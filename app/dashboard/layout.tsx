@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { SideNavBar } from "../../components/SideNavBar";
 import { TopHeader } from "../../components/TopHeader";
 
@@ -9,8 +9,10 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-surface text-on-surface font-body relative flex overflow-hidden">
+    <div className="h-screen bg-surface text-on-surface font-body relative flex overflow-hidden">
       {/* Background decoration grid and blurs */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.35]"></div>
@@ -18,13 +20,21 @@ export default function DashboardLayout({
         <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[110px]"></div>
       </div>
 
-      {/* Persistent left navigation */}
-      <SideNavBar />
+      {/* Backdrop overlay for mobile menu drawer */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 md:hidden cursor-pointer"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Persistent left navigation / mobile drawer */}
+      <SideNavBar isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
 
       {/* Main content viewport */}
       <div className="flex-1 flex flex-col md:ml-[280px] relative z-10 min-w-0">
         {/* Top header navbar */}
-        <TopHeader />
+        <TopHeader onMenuToggle={() => setIsMobileMenuOpen(true)} />
 
         {/* Dashboard inner canvas */}
         <main className="flex-1 pt-16 h-[calc(100vh-64px)] overflow-y-auto overflow-x-hidden">

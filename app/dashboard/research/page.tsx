@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useWorkspace } from "../../../context/WorkspaceContext";
+import { useWorkspace, Interview } from "../../../context/WorkspaceContext";
 
 export default function ResearchPage() {
   const {
@@ -17,6 +17,7 @@ export default function ResearchPage() {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"overview" | "interviews" | "insights" | "quality">("overview");
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(null);
   
   // Form States
   const [newProjName, setNewProjName] = useState("");
@@ -89,7 +90,7 @@ export default function ResearchPage() {
   return (
     <div className="px-6 py-6 max-w-[1500px] mx-auto w-full flex flex-col gap-5 h-full relative">
       {/* Page Header */}
-      <header className="flex justify-between items-center border-b border-outline-glow/30 pb-4 shrink-0">
+      <header className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-outline-glow/30 pb-4 gap-4 shrink-0">
         <div>
           <div className="flex items-center gap-2 text-secondary mb-1 font-mono text-[9px] tracking-wider uppercase">
             <span className="material-symbols-outlined text-[10px]">science</span>
@@ -112,7 +113,7 @@ export default function ResearchPage() {
       {/* Main Layout Split */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 flex-1 min-h-0">
         {/* Left Column: Projects List (3/12) */}
-        <div className="xl:col-span-3 glass-panel border border-outline-glow rounded-xl p-4 flex flex-col gap-4 overflow-y-auto max-h-[600px] xl:max-h-[calc(100vh-170px)]">
+        <div className="xl:col-span-3 glass-panel border border-outline-glow rounded-xl p-4 flex flex-col gap-4 overflow-y-auto max-h-[300px] xl:max-h-[calc(100vh-170px)]">
           <div className="font-mono text-[10px] text-on-surface-variant/50 uppercase tracking-widest border-b border-outline-glow/30 pb-2">
             Daftar Proyek Riset
           </div>
@@ -159,12 +160,12 @@ export default function ResearchPage() {
         </div>
 
         {/* Right Column: Selected Project Detail Area (9/12) */}
-        <div className="xl:col-span-9 flex flex-col h-[600px] xl:h-[calc(100vh-170px)] glass-panel border border-outline-glow rounded-xl overflow-hidden">
+        <div className="xl:col-span-9 flex flex-col h-auto xl:h-[calc(100vh-170px)] glass-panel border border-outline-glow rounded-xl overflow-hidden">
           {activeProject ? (
             <div className="flex flex-col h-full min-h-0">
               {/* Tab Navigation Menu */}
-              <div className="bg-surface-container-high/60 border-b border-outline-glow/30 px-5 pt-3.5 flex justify-between items-center shrink-0">
-                <div className="flex gap-2 text-xs">
+              <div className="bg-surface-container-high/60 border-b border-outline-glow/30 px-5 pt-3.5 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 shrink-0">
+                <div className="flex gap-2 text-xs overflow-x-auto custom-scrollbar whitespace-nowrap pb-2 sm:pb-0">
                   {(["overview", "interviews", "insights", "quality"] as const).map((tab) => (
                     <button
                       key={tab}
@@ -228,7 +229,7 @@ export default function ResearchPage() {
                     </div>
 
                     {/* Stats Widget */}
-                    <div className="grid grid-cols-3 gap-4 border-t border-outline-glow/20 pt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-outline-glow/20 pt-4">
                       <div className="text-center p-3 bg-surface-deep border border-outline-glow/20 rounded-lg">
                         <span className="text-2xl font-mono font-bold text-primary">{projectInterviews.length}</span>
                         <span className="block text-[9px] text-on-surface-variant/80 uppercase font-mono mt-1">Total Responden</span>
@@ -281,7 +282,8 @@ export default function ResearchPage() {
                         {projectInterviews.map((int) => (
                           <div
                             key={int.id}
-                            className="bg-surface-container-low border border-outline-glow/30 p-3 rounded-lg flex items-center justify-between hover:border-primary/40 transition-colors"
+                            onClick={() => int.status === "completed" && setSelectedInterview(int)}
+                            className="bg-surface-container-low border border-outline-glow/30 p-3 rounded-lg flex items-center justify-between hover:border-primary/40 transition-colors cursor-pointer"
                           >
                             <div className="flex items-center gap-3">
                               <span className="material-symbols-outlined text-lg text-primary">chat_bubble</span>
@@ -403,7 +405,7 @@ export default function ResearchPage() {
 
       {/* Create Research Project Modal */}
       {createModalOpen && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setCreateModalOpen(false)}
@@ -473,6 +475,77 @@ export default function ResearchPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Transcript Viewer Dialog */}
+      {selectedInterview && (
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
+          <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-2xl w-full p-6 relative flex flex-col h-[550px] overflow-hidden">
+            <button
+              onClick={() => setSelectedInterview(null)}
+              className="absolute top-4 right-4 text-on-surface-variant hover:text-primary cursor-pointer"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            
+            {/* Header */}
+            <div className="border-b border-outline-glow/20 pb-3 flex items-center gap-3 shrink-0">
+              <span className="material-symbols-outlined text-2xl text-secondary">chat_bubble</span>
+              <div>
+                <h3 className="font-headline text-sm font-bold text-on-surface">Transkrip: {selectedInterview.respondentName}</h3>
+                <p className="text-[10px] text-on-surface-variant">{selectedInterview.jobRole} • Mode {selectedInterview.mode}</p>
+              </div>
+            </div>
+
+            {/* Metrics Row */}
+            <div className="flex gap-4 bg-surface-container-low border border-outline-glow/30 p-3 rounded-lg my-3 shrink-0 font-mono text-[10px]">
+              <div>
+                <span className="text-on-surface-variant">Skor Kualitas:</span>
+                <span className="text-secondary font-bold ml-1.5">{selectedInterview.qualityScore}%</span>
+              </div>
+              <div className="h-4 w-[1px] bg-outline-glow/40"></div>
+              <div>
+                <span className="text-on-surface-variant">Cakupan Skrip:</span>
+                <span className="text-primary font-bold ml-1.5">{selectedInterview.scriptCoveragePct}%</span>
+              </div>
+            </div>
+
+            {/* Conversation Log bubbles */}
+            <div className="flex-1 overflow-y-auto p-2 space-y-4 border border-outline-glow/20 rounded-lg bg-surface-deep/50 custom-scrollbar">
+              {selectedInterview.transcriptText.split("\n").filter(line => line.trim() !== "").map((bubble, bIdx) => {
+                const isIva = bubble.startsWith("IVA:") || bubble.startsWith("Interviewer:");
+                const isInterviewer = bubble.startsWith("Interviewer:");
+                const isUserOrIva = isIva || isInterviewer;
+                const textOnly = bubble.replace(/^(IVA:|Interviewer:|[\w\s\(\)#]+:)\s*/, "");
+                const nameLabel = bubble.match(/^([\w\s\(\)#]+:)/)?.[0]?.slice(0, -1) || "Speaker";
+
+                return (
+                  <div key={bIdx} className={`flex max-w-[85%] flex-col ${isUserOrIva ? "mr-auto" : "ml-auto items-end"}`}>
+                    <span className="text-[9px] font-mono text-on-surface-variant/65 mb-1 px-1">{nameLabel}</span>
+                    <div
+                      className={`p-3 rounded-xl text-[11px] leading-relaxed ${
+                        isUserOrIva
+                          ? "bg-surface-container border border-outline-glow/40 text-on-surface rounded-tl-none"
+                          : "bg-primary text-surface-dim rounded-tr-none"
+                      }`}
+                    >
+                      <p>{textOnly}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-end pt-4 shrink-0">
+              <button
+                onClick={() => setSelectedInterview(null)}
+                className="px-4 py-2 bg-surface-container-high border border-outline-glow hover:border-on-surface/40 text-on-surface rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Tutup Dialog
+              </button>
+            </div>
           </div>
         </div>
       )}

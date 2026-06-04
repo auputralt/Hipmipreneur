@@ -3,7 +3,11 @@
 import React, { useState } from "react";
 import { useWorkspace } from "../context/WorkspaceContext";
 
-export const TopHeader: React.FC = () => {
+interface TopHeaderProps {
+  onMenuToggle?: () => void;
+}
+
+export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
   const { workspaces, activeWorkspaceId, activeWorkspace, switchWorkspace, createWorkspace } = useWorkspace();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -24,66 +28,76 @@ export const TopHeader: React.FC = () => {
   return (
     <>
       <header className="bg-surface-glass text-primary font-headline fixed top-0 right-0 left-0 md:left-[280px] h-16 backdrop-blur-md border-b border-outline-glow shadow-sm flex items-center justify-between px-6 z-40">
-        {/* Left Side: Workspace Selector */}
-        <div className="flex items-center gap-4 relative">
+        {/* Left Side: Workspace Selector and Mobile Toggle */}
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 bg-surface-container-high/60 border border-outline-glow rounded-lg px-3 py-1.5 hover:border-primary transition-all text-on-surface text-sm cursor-pointer select-none"
+            onClick={onMenuToggle}
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/40 transition-colors cursor-pointer"
+            title="Open navigation menu"
           >
-            <span className="material-symbols-outlined text-[16px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
-              rocket_launch
-            </span>
-            <span className="font-semibold text-sm max-w-[120px] sm:max-w-none truncate">
-              {activeWorkspace?.name || "Select Workspace"}
-            </span>
-            <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
-              keyboard_arrow_down
-            </span>
+            <span className="material-symbols-outlined text-[22px]">menu</span>
           </button>
 
-          {/* Switcher Dropdown Menu */}
-          {dropdownOpen && (
-            <div className="absolute top-12 left-0 w-64 bg-surface-container-highest border border-outline-glow rounded-xl shadow-2xl p-2 z-50 backdrop-blur-xl">
-              <div className="text-[10px] font-mono text-on-surface-variant/50 uppercase tracking-widest px-2.5 py-1.5 border-b border-outline-glow/50 mb-1">
-                Your Workspaces
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center gap-2 bg-surface-container-high/60 border border-outline-glow rounded-lg px-3 py-1.5 hover:border-primary transition-all text-on-surface text-sm cursor-pointer select-none"
+            >
+              <span className="material-symbols-outlined text-[16px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                rocket_launch
+              </span>
+              <span className="font-semibold text-sm max-w-[120px] sm:max-w-none truncate">
+                {activeWorkspace?.name || "Select Workspace"}
+              </span>
+              <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
+                keyboard_arrow_down
+              </span>
+            </button>
+
+            {/* Switcher Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="absolute top-12 left-0 w-64 bg-surface-container-highest border border-outline-glow rounded-xl shadow-2xl p-2 z-50 backdrop-blur-xl">
+                <div className="text-[10px] font-mono text-on-surface-variant/50 uppercase tracking-widest px-2.5 py-1.5 border-b border-outline-glow/50 mb-1">
+                  Your Workspaces
+                </div>
+                <ul className="space-y-1">
+                  {workspaces.map((ws) => (
+                    <li key={ws.id}>
+                      <button
+                        onClick={() => {
+                          switchWorkspace(ws.id);
+                          setDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between transition-colors ${
+                          ws.id === activeWorkspaceId
+                            ? "bg-primary/20 text-primary font-bold border border-primary/30"
+                            : "text-on-surface-variant hover:bg-surface-variant/40 hover:text-on-surface"
+                        }`}
+                      >
+                        <div className="flex flex-col min-w-0">
+                          <span className="truncate">{ws.name}</span>
+                          <span className="text-[9px] text-on-surface-variant truncate font-normal">{ws.description}</span>
+                        </div>
+                        {ws.id === activeWorkspaceId && (
+                          <span className="material-symbols-outlined text-[14px]">check</span>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    setCreateModalOpen(true);
+                  }}
+                  className="w-full text-left px-3 py-2 mt-2 border-t border-outline-glow/50 hover:bg-surface-variant/30 text-primary text-xs font-semibold flex items-center gap-2 rounded-b-lg"
+                >
+                  <span className="material-symbols-outlined text-[16px]">add_circle</span>
+                  Create New Venture
+                </button>
               </div>
-              <ul className="space-y-1">
-                {workspaces.map((ws) => (
-                  <li key={ws.id}>
-                    <button
-                      onClick={() => {
-                        switchWorkspace(ws.id);
-                        setDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between transition-colors ${
-                        ws.id === activeWorkspaceId
-                          ? "bg-primary/20 text-primary font-bold border border-primary/30"
-                          : "text-on-surface-variant hover:bg-surface-variant/40 hover:text-on-surface"
-                      }`}
-                    >
-                      <div className="flex flex-col min-w-0">
-                        <span className="truncate">{ws.name}</span>
-                        <span className="text-[9px] text-on-surface-variant truncate font-normal">{ws.description}</span>
-                      </div>
-                      {ws.id === activeWorkspaceId && (
-                        <span className="material-symbols-outlined text-[14px]">check</span>
-                      )}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => {
-                  setDropdownOpen(false);
-                  setCreateModalOpen(true);
-                }}
-                className="w-full text-left px-3 py-2 mt-2 border-t border-outline-glow/50 hover:bg-surface-variant/30 text-primary text-xs font-semibold flex items-center gap-2 rounded-b-lg"
-              >
-                <span className="material-symbols-outlined text-[16px]">add_circle</span>
-                Create New Venture
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Right Side: Indicators and Actions */}
@@ -139,7 +153,7 @@ export const TopHeader: React.FC = () => {
 
       {/* Create Workspace Modal */}
       {createModalOpen && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full overflow-hidden p-6 relative">
             <button
               onClick={() => setCreateModalOpen(false)}

@@ -221,7 +221,7 @@ export default function ScriptsPage() {
           </div>
 
           {/* Right Column: Tips & Guidelines (4/12) */}
-          <aside className="lg:col-span-4 sticky top-4 flex flex-col gap-4">
+          <aside className="lg:col-span-4 lg:sticky lg:top-4 flex flex-col gap-4">
             <div className="glass-panel border border-outline-glow rounded-xl p-5 flex flex-col gap-4">
               <div className="flex items-center gap-2 border-b border-outline-glow/30 pb-3">
                 <span className="material-symbols-outlined text-primary text-lg">lightbulb</span>
@@ -253,7 +253,7 @@ export default function ScriptsPage() {
 
       {/* Editing Dialog Modal */}
       {editingQuestion && (
-        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
           <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setEditingQuestion(null)}
