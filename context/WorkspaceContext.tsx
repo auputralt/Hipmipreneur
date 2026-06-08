@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
+import * as ds from "../lib/dataService";
 
 export interface Workspace {
   id: string;
@@ -142,6 +144,81 @@ export interface SalesDeckAsset {
   slides: SalesDeckSlide[];
 }
 
+export interface ScriptSection {
+  id: string;
+  title: string;
+  duration: string;
+  questions: string[];
+}
+
+export interface Contact {
+  id: string;
+  workspaceId: string;
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  jobRole: string;
+  segmentId: string;
+  tags: string[];
+  source: "manual" | "interview" | "import";
+  notes: string;
+  lastContactedAt: string | null;
+  createdAt: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  workspaceId: string;
+  title: string;
+  description: string;
+  eventType: "interview" | "mentor_sync" | "team_followup" | "deadline" | "other";
+  linkedContactId: string;
+  linkedProjectId: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  isCompleted: boolean;
+  createdAt: string;
+}
+
+export interface VentureNote {
+  id: string;
+  workspaceId: string;
+  title: string;
+  content: string;
+  linkedSegmentId: string;
+  linkedCanvasSection: string;
+  colorTag: string;
+  isPinned: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GlossaryTerm {
+  id: string;
+  workspaceId: string;
+  term: string;
+  definition: string;
+  category: string;
+  sourceInterviewId: string;
+  sourceProjectId: string;
+  isAutoDetected: boolean;
+  createdAt: string;
+}
+
+export interface AnalysisReport {
+  id: string;
+  workspaceId: string;
+  name: string;
+  description: string;
+  comparisonType: "cross_research" | "validation_signals" | "market_fit";
+  projectIds: string[];
+  validationSignals: { label: string; value: number; description: string }[];
+  summary: string;
+  createdAt: string;
+}
+
 export interface WorkspaceContextType {
   workspaces: Workspace[];
   activeWorkspaceId: string;
@@ -160,6 +237,14 @@ export interface WorkspaceContextType {
   landingPages: Record<string, LandingPageAsset[]>; // Mapped by workspaceId
   salesDecks: Record<string, SalesDeckAsset[]>; // Mapped by workspaceId
   subscriptionPlans: Record<string, string>; // Mapped by workspaceId
+  // New feature state
+  contacts: Record<string, Contact[]>; // Mapped by workspaceId
+  calendarEvents: Record<string, CalendarEvent[]>; // Mapped by workspaceId
+  notes: Record<string, VentureNote[]>; // Mapped by workspaceId
+  glossaryTerms: Record<string, GlossaryTerm[]>; // Mapped by workspaceId
+  analysisReports: Record<string, AnalysisReport[]>; // Mapped by workspaceId
+  interviewScripts: Record<string, ScriptSection[]>; // Mapped by workspaceId
+  isDataLoaded: boolean; // True once initial Supabase load completes
   createWorkspace: (name: string, description: string, type: string) => Workspace;
   switchWorkspace: (id: string) => void;
   updateStartingPath: (path: string) => void;
@@ -167,7 +252,7 @@ export interface WorkspaceContextType {
   uncompleteTask: (taskId: string) => void;
   completeOnboarding: () => void;
   updateCanvasSection: (workspaceId: string, section: keyof LeanCanvas, content: string) => void;
-  extractCanvasWithAI: (workspaceId: string, rawInput: string) => Promise<void>;
+  extractCanvasWithAI: (workspaceId: string, rawInput: string) => Promise<{ usedAI: boolean }>;
   addResearchProject: (workspaceId: string, name: string, segmentId: string, type: string) => void;
   generateSyntheticInterviews: (projectId: string, count: number) => Promise<void>;
   synthesizeResearchInsights: (projectId: string) => Promise<void>;
@@ -182,6 +267,26 @@ export interface WorkspaceContextType {
   upgradeSubscription: (workspaceId: string, plan: string) => void;
   purchaseCredits: (workspaceId: string, amount: number) => void;
   updateWorkspaceDetails: (workspaceId: string, name: string, description: string) => void;
+  // New feature functions
+  addContact: (contact: Omit<Contact, "id" | "workspaceId" | "createdAt">) => void;
+  updateContact: (workspaceId: string, contactId: string, updates: Partial<Contact>) => void;
+  deleteContact: (workspaceId: string, contactId: string) => void;
+  addCalendarEvent: (event: Omit<CalendarEvent, "id" | "workspaceId" | "createdAt">) => void;
+  updateCalendarEvent: (workspaceId: string, eventId: string, updates: Partial<CalendarEvent>) => void;
+  deleteCalendarEvent: (workspaceId: string, eventId: string) => void;
+  completeCalendarEvent: (workspaceId: string, eventId: string) => void;
+  addNote: (note: Omit<VentureNote, "id" | "workspaceId" | "createdAt" | "updatedAt">) => void;
+  updateNote: (workspaceId: string, noteId: string, updates: Partial<VentureNote>) => void;
+  deleteNote: (workspaceId: string, noteId: string) => void;
+  togglePinNote: (workspaceId: string, noteId: string) => void;
+  addGlossaryTerm: (term: Omit<GlossaryTerm, "id" | "workspaceId" | "createdAt">) => void;
+  updateGlossaryTerm: (workspaceId: string, termId: string, updates: Partial<GlossaryTerm>) => void;
+  deleteGlossaryTerm: (workspaceId: string, termId: string) => void;
+  autoDetectTermsFromTranscript: (workspaceId: string, projectId: string) => Promise<void>;
+  addAnalysisReport: (report: Omit<AnalysisReport, "id" | "workspaceId" | "createdAt">) => void;
+  updateAnalysisReport: (workspaceId: string, reportId: string, updates: Partial<AnalysisReport>) => void;
+  deleteAnalysisReport: (workspaceId: string, reportId: string) => void;
+  saveInterviewScripts: (workspaceId: string, sections: ScriptSection[]) => void;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -193,6 +298,30 @@ export const useWorkspace = () => {
   }
   return context;
 };
+
+// Helper: safely parse API error JSON to extract human-readable message
+function parseApiError(text: string): string {
+  try {
+    const parsed = JSON.parse(text);
+    if (parsed.error && typeof parsed.error === "string") return parsed.error;
+    return text;
+  } catch {
+    return text;
+  }
+}
+
+// Helper: HTML-escape a string for safe interpolation in templates
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Re-export escapeHtml for use in landing pages component
+export { escapeHtml };
 
 // Initial static seed data for mock
 const SEED_CANVASES: Record<string, LeanCanvas> = {
@@ -263,7 +392,7 @@ const SEED_INTERVIEWS: Interview[] = [
     status: "completed",
     qualityScore: 92,
     scriptCoveragePct: 100,
-    transcriptText: "Budi: Kami sering mengalami downtime mendadak di lini produksi nomor 3. Sekali mati, rugi puluhan juta rupiah per jam. Kami butuh deteksi dini yang tidak bergantung penuh pada internet awan karena koneksi pabrik kami tidak stabil.\nInterviewer: Bagaimana cara Anda menangani ini sekarang?\nBudi: Saat ini kami hanya melakukan maintenance berkala setiap bulan, tapi itu sering kecolongan. Kami butuh alert real-time langsung di alatnya.",
+    transcriptText: "Budi: Kami sering mengalami downtime mendadak di lini produksi nomor 3. Sekali mati, rugi puluhan juta rupiah per jam. Kami butuh deteksi dini yang tidak bergantung penuh pada internet awan karena koneksi pabrik kami tidak stabil.\nInterviewer: Bagaimana cara Anda menangani ini sekarang?\nBudi: Saat ini kami hanya melakukan maintenance berkala setiap bulan, tapi itu sering kekolongan. Kami butuh alert real-time langsung di alatnya.",
     date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
   },
   {
@@ -469,7 +598,11 @@ const DEFAULT_USER: UserProfile = {
   avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDbqqnkvcAMm5pQYKhBHhE2JvniuVMi4j4zUbwVKFNeQTOZ1bwp00oHicL-A3-8uTlxf2IFXW_a5Y2HEE8VabFVauIwVfiDiiAOzuTgvkTJcrVyu2ueMlfh1xy1pqTFrL_4EG27pXtU85fLRWTVATLaTjZY-2UbUJG6ShemJGKma96btBufd61FUI9_Jb6ZQe9tvMJ2RKXMc8gBUBH52HW-g7LOW9B1jJlMjd5S6nhsciK1X9Aiox9J5IEwvva1jFdYt_qCrtCC7SsC",
 };
 
+// Deduction lock to prevent race conditions on concurrent credit deductions
+const deductionLocks = new Map<string, boolean>();
+
 export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { userId, isLoaded } = useAuth();
   const [workspaces, setWorkspaces] = useState<Workspace[]>(DEFAULT_WORKSPACES);
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string>("ws-nexus");
   const [userProfile] = useState<UserProfile>(DEFAULT_USER);
@@ -479,6 +612,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     "ws-nexus": [
       "canvas-builder-1",
       "canvas-builder-2",
+      "canvas-builder-uvp",
+      "canvas-builder-solution",
+      "canvas-builder-unfair",
       "canvas-builder-3",
       "validation-real-1",
       "validation-real-2",
@@ -504,10 +640,108 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [salesDecks, setSalesDecks] = useState<Record<string, SalesDeckAsset[]>>(SEED_SALES_DECKS);
   const [subscriptionPlans, setSubscriptionPlans] = useState<Record<string, string>>({ "ws-nexus": "Growth", "ws-dummy": "Free Trial" });
 
+  // New feature states
+  const [contacts, setContacts] = useState<Record<string, Contact[]>>({});
+  const [calendarEvents, setCalendarEvents] = useState<Record<string, CalendarEvent[]>>({});
+  const [notes, setNotes] = useState<Record<string, VentureNote[]>>({});
+  const [glossaryTerms, setGlossaryTerms] = useState<Record<string, GlossaryTerm[]>>({});
+  const [analysisReports, setAnalysisReports] = useState<Record<string, AnalysisReport[]>>({});
+  const [interviewScripts, setInterviewScripts] = useState<Record<string, ScriptSection[]>>(({}));
+  const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+
+  // Refs for accessing latest state in async callbacks without stale closures
+  const canvasDataRef = useRef(canvasData);
+  const customerSegmentsRef = useRef(customerSegments);
+  const researchProjectsRef = useRef(researchProjects);
+  const interviewsRef = useRef(interviews);
+  const insightReportsRef = useRef(insightReports);
+  const personasRef = useRef(personas);
+  const positioningDocsRef = useRef(positioningDocs);
+  const workspacesRef = useRef(workspaces);
+
+  canvasDataRef.current = canvasData;
+  customerSegmentsRef.current = customerSegments;
+  researchProjectsRef.current = researchProjects;
+  interviewsRef.current = interviews;
+  insightReportsRef.current = insightReports;
+  personasRef.current = personas;
+  positioningDocsRef.current = positioningDocs;
+  workspacesRef.current = workspaces;
+
+  // ============================================================
+  // LOAD FROM SUPABASE — called once when Clerk userId is available
+  // ============================================================
+  useEffect(() => {
+    if (!userId || isDataLoaded) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        // Try loading from Supabase
+        const dbWorkspaces = await ds.loadWorkspaces(userId);
+        if (cancelled) return;
+
+        if (dbWorkspaces && dbWorkspaces.length > 0) {
+          setWorkspaces(dbWorkspaces);
+          setActiveWorkspaceId(dbWorkspaces[0].id);
+          const ws = dbWorkspaces[0];
+          if (ws.type) setStartingPath(ws.type);
+
+          // Load all data for each workspace in parallel
+          const results = await Promise.allSettled([
+            ds.loadCanvasData(dbWorkspaces[0].id),
+            ds.loadSegments(dbWorkspaces[0].id),
+            ds.loadResearchProjects(dbWorkspaces[0].id),
+            ds.loadInterviews(dbWorkspaces[0].id),
+            ds.loadCompletedTasks(dbWorkspaces[0].id),
+            ds.loadPersonas(dbWorkspaces[0].id),
+            ds.loadPositioningDocs(dbWorkspaces[0].id),
+            ds.loadLandingPages(dbWorkspaces[0].id),
+            ds.loadSalesDecks(dbWorkspaces[0].id),
+            ds.loadSubscriptionPlans(dbWorkspaces[0].id),
+            ds.loadContacts(dbWorkspaces[0].id),
+            ds.loadCalendarEvents(dbWorkspaces[0].id),
+            ds.loadNotes(dbWorkspaces[0].id),
+            ds.loadGlossaryTerms(dbWorkspaces[0].id),
+            ds.loadAnalysisReports(dbWorkspaces[0].id),
+            ds.loadInterviewScripts(dbWorkspaces[0].id),
+          ]);
+
+          if (cancelled) return;
+          const v = (i: number) => results[i].status === "fulfilled" ? results[i].value : undefined;
+          if (v(0)) setCanvasData(prev => ({ ...prev, [dbWorkspaces[0].id]: v(0) }));
+          if (v(1)) setCustomerSegments(prev => ({ ...prev, [dbWorkspaces[0].id]: v(1) }));
+          if (v(2)) setResearchProjects(v(2));
+          if (v(3)) setInterviews(v(3));
+          if (v(4)) setCompletedTasksRecord(prev => ({ ...prev, [dbWorkspaces[0].id]: v(4) }));
+          if (v(5)) setPersonas(prev => ({ ...prev, [dbWorkspaces[0].id]: v(5) }));
+          if (v(6)) setPositioningDocs(prev => ({ ...prev, [dbWorkspaces[0].id]: v(6) }));
+          if (v(7)) setLandingPages(prev => ({ ...prev, [dbWorkspaces[0].id]: v(7) }));
+          if (v(8)) setSalesDecks(prev => ({ ...prev, [dbWorkspaces[0].id]: v(8) }));
+          if (v(9)) setSubscriptionPlans(v(9));
+          if (v(10)) setContacts(prev => ({ ...prev, [dbWorkspaces[0].id]: v(10) }));
+          if (v(11)) setCalendarEvents(prev => ({ ...prev, [dbWorkspaces[0].id]: v(11) }));
+          if (v(12)) setNotes(prev => ({ ...prev, [dbWorkspaces[0].id]: v(12) }));
+          if (v(13)) setGlossaryTerms(prev => ({ ...prev, [dbWorkspaces[0].id]: v(13) }));
+          if (v(14)) setAnalysisReports(prev => ({ ...prev, [dbWorkspaces[0].id]: v(14) }));
+          if (v(15)) setInterviewScripts(prev => ({ ...prev, [dbWorkspaces[0].id]: v(15) }));
+        }
+      } catch (err) {
+        console.warn("Failed to load from Supabase, using seed data:", err);
+      } finally {
+        setIsDataLoaded(true);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [userId, isDataLoaded]);
+
   // Calculate health dynamically based on completed tasks on-the-fly for all workspaces
+  // Total known tasks: 12 (6 Phase 1 + 3 Phase 2 + 3 Phase 3)
+  const TOTAL_TASKS = 12;
   const derivedWorkspaces = workspaces.map((ws) => {
     const wsTasks = completedTasksRecord[ws.id] || [];
-    return { ...ws, healthScore: Math.min(15 + wsTasks.length * 10, 100) };
+    return { ...ws, healthScore: Math.min(Math.round((Math.min(wsTasks.length, TOTAL_TASKS) / TOTAL_TASKS) * 100), 100) };
   });
 
   const activeWorkspace = derivedWorkspaces.find((w) => w.id === activeWorkspaceId);
@@ -530,7 +764,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setActiveWorkspaceId(newId);
     setStartingPath(type);
     setCompletedTasksRecord((prev) => ({ ...prev, [newId]: [] }));
-    setOnboardingCompleted(false);
+    // BUG FIX: Don't reset onboarding for users who already completed it
+    // Only set to false if this is the very first workspace being created
+    // (onboardingCompleted is already true for existing users)
 
     // Initialize blank canvas data
     setCanvasData((prev) => ({
@@ -603,21 +839,34 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setOnboardingCompleted(true);
   };
 
-  const deductCredits = (workspaceId: string, amount: number): boolean => {
+  // BUG FIX: deductCredits now uses a synchronous check with a lock to prevent race conditions
+  // and returns the correct boolean value
+  const deductCredits = useCallback((workspaceId: string, amount: number): boolean => {
+    // Prevent concurrent deductions on the same workspace
+    if (deductionLocks.get(workspaceId)) return false;
+    deductionLocks.set(workspaceId, true);
+
     let success = false;
-    setWorkspaces((prev) =>
-      prev.map((ws) => {
-        if (ws.id === workspaceId) {
-          if (ws.credits >= amount) {
-            success = true;
+
+    // Synchronously read current credits from the ref (always up-to-date)
+    const currentWs = workspacesRef.current.find((ws) => ws.id === workspaceId);
+    if (currentWs && currentWs.credits >= amount) {
+      success = true;
+      setWorkspaces((prev) =>
+        prev.map((ws) => {
+          if (ws.id === workspaceId) {
             return { ...ws, credits: ws.credits - amount };
           }
-        }
-        return ws;
-      })
-    );
+          return ws;
+        })
+      );
+    }
+
+    // Release lock on next tick to allow the batch to flush
+    setTimeout(() => deductionLocks.delete(workspaceId), 0);
+
     return success;
-  };
+  }, []);
 
   const updateCanvasSection = (workspaceId: string, section: keyof LeanCanvas, content: string) => {
     setCanvasData((prev) => {
@@ -642,8 +891,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     });
   };
 
-  // Simulates AI Canvas Extraction
-  const extractCanvasWithAI = async (workspaceId: string, rawInput: string): Promise<void> => {
+  // AI Canvas Extraction — tries real AI first, falls back to mock templates
+  const extractCanvasWithAI = async (workspaceId: string, rawInput: string): Promise<{ usedAI: boolean }> => {
     if (!deductCredits(workspaceId, 500)) {
       throw new Error("Kredit tidak mencukupi untuk melakukan ekstraksi kanvas AI.");
     }
@@ -659,7 +908,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const generatedCanvas: LeanCanvas = await response.json();
@@ -682,6 +931,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }));
 
       completeTask("canvas-builder-1");
+      return { usedAI: true };
     } catch (err) {
       console.warn("Real AI extraction failed, falling back to mock:", err);
       // Mock Fallback
@@ -745,6 +995,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }));
 
       completeTask("canvas-builder-1");
+      return { usedAI: false };
     }
   };
 
@@ -762,8 +1013,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   // Simulates IVA generating synthetic interviews
+  // BUG FIX: Uses refs to avoid stale closures
   const generateSyntheticInterviews = async (projectId: string, count: number): Promise<void> => {
-    const project = researchProjects.find((p) => p.id === projectId);
+    const project = researchProjectsRef.current.find((p) => p.id === projectId);
     if (!project) return;
 
     if (!deductCredits(project.workspaceId, count * 1500)) {
@@ -771,8 +1023,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     try {
-      const canvas = canvasData[project.workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi" };
-      const segment = customerSegments[project.workspaceId]?.find(s => s.id === project.segmentId) || { name: "Target Segment", description: "Deskripsi segment" };
+      const canvas = canvasDataRef.current[project.workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi" };
+      const segment = customerSegmentsRef.current[project.workspaceId]?.find(s => s.id === project.segmentId) || { name: "Target Segment", description: "Deskripsi segment" };
 
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -791,7 +1043,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const generatedList = await response.json();
@@ -814,7 +1066,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.warn("Real AI synthetic interviews failed, falling back to mock:", err);
       // Mock Fallback
-      const canvas = canvasData[project.workspaceId] || { uvp: "Startup Ide" };
+      const canvas = canvasDataRef.current[project.workspaceId] || { uvp: "Startup Ide" };
       const mockNames = ["Andi Wijaya", "Rina Kartika", "Dian Sastro", "Eko Prasetyo", "Feri Irawan"];
       const mockRoles = ["Operator Lapangan", "Manager Operasional", "Pemilik Toko", "Supervisor Logistik", "Konsultan Bisnis"];
       const newInterviews: Interview[] = [];
@@ -851,7 +1103,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // Synthesize completed interviews to cluster insights
   const synthesizeResearchInsights = async (projectId: string): Promise<void> => {
-    const project = researchProjects.find((p) => p.id === projectId);
+    const project = researchProjectsRef.current.find((p) => p.id === projectId);
     if (!project) return;
 
     if (!deductCredits(project.workspaceId, 1000)) {
@@ -859,8 +1111,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     try {
-      const canvas = canvasData[project.workspaceId] || { uvp: "Startup", problem: "Masalah" };
-      const projectInterviews = interviews.filter(i => i.researchProjectId === projectId && i.status === "completed");
+      const canvas = canvasDataRef.current[project.workspaceId] || { uvp: "Startup", problem: "Masalah" };
+      const projectInterviews = interviewsRef.current.filter(i => i.researchProjectId === projectId && i.status === "completed");
 
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -876,7 +1128,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const report = await response.json();
@@ -969,12 +1221,12 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     try {
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi" };
-      const segment = customerSegments[workspaceId]?.find(s => s.id === segmentId) || { name: "Segment", description: "Deskripsi" };
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi" };
+      const segment = customerSegmentsRef.current[workspaceId]?.find(s => s.id === segmentId) || { name: "Segment", description: "Deskripsi" };
 
       // Find research project and insights for this segment if any
-      const project = researchProjects.find(p => p.workspaceId === workspaceId && p.segmentId === segmentId);
-      const insights = project ? insightReports[project.id] : null;
+      const project = researchProjectsRef.current.find(p => p.workspaceId === workspaceId && p.segmentId === segmentId);
+      const insights = project ? insightReportsRef.current[project.id] : null;
 
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -991,7 +1243,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const rawPersona = await response.json();
@@ -1022,7 +1274,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.warn("Real AI persona generation failed, falling back to mock:", err);
       // Mock Fallback
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah" };
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah" };
       const isKopi = canvas.uvp.toLowerCase().includes("kopi") || canvas.problem.toLowerCase().includes("kopi");
       const isHealth = canvas.uvp.toLowerCase().includes("health") || canvas.problem.toLowerCase().includes("sehat");
 
@@ -1169,13 +1421,13 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       throw new Error("Kredit tidak mencukupi untuk penyusunan positioning statement.");
     }
 
-    const workspacePersonas = personas[workspaceId] || [];
+    const workspacePersonas = personasRef.current[workspaceId] || [];
     const persona = workspacePersonas.find(p => p.id === personaId);
     if (!persona) return;
 
     try {
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi", unfairAdvantage: "Pembeda" };
-      const workspace = workspaces.find(w => w.id === workspaceId);
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi", unfairAdvantage: "Pembeda" };
+      const workspace = workspacesRef.current.find(w => w.id === workspaceId);
 
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -1191,7 +1443,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const rawPositioning = await response.json();
@@ -1217,7 +1469,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.warn("Real AI positioning generation failed, falling back to mock:", err);
       // Mock Fallback
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah", channels: "Online" };
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah", channels: "Online" };
       const isKopi = canvas.uvp.toLowerCase().includes("kopi") || canvas.problem.toLowerCase().includes("kopi");
       const isHealth = canvas.uvp.toLowerCase().includes("health") || canvas.problem.toLowerCase().includes("sehat");
 
@@ -1239,7 +1491,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             "Uji coba gratis pengadaan 10kg biji kopi pertama"
           ],
           messagingPillars: [
-            { title: "Pangkas Perantara", body: "Hubungkan pesanan Anda langsung to produsen tanpa biaya perantara komisi berlapis." },
+            { title: "Pangkas Perantara", body: "Hubungkan pesanan Anda langsung ke produsen tanpa biaya perantara komisi berlapis." },
             { title: "Jaminan Kualitas Konstan", body: "Setiap biji kopi disortir dan dikontrol kualitasnya sesuai standar cita rasa kafe Anda." },
             { title: "Pembayaran Fleksibel Tempo", body: "Fasilitas bayar tempo (credit terms) hingga 30 hari untuk menjaga perputaran arus kas kafe." }
           ],
@@ -1304,15 +1556,15 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       throw new Error("Kredit tidak mencukupi untuk pembuatan draf landing page.");
     }
 
-    const workspacePersonas = personas[workspaceId] || [];
+    const workspacePersonas = personasRef.current[workspaceId] || [];
     const persona = workspacePersonas.find(p => p.id === personaId);
-    const workspacePositioning = positioningDocs[workspaceId] || [];
+    const workspacePositioning = positioningDocsRef.current[workspaceId] || [];
     const positioning = workspacePositioning.find(p => p.personaId === personaId);
 
     if (!persona || !positioning) return;
 
     try {
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah" };
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah" };
 
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -1328,7 +1580,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const rawLp = await response.json();
@@ -1356,7 +1608,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.warn("Real AI landing page generation failed, falling back to mock:", err);
       // Mock Fallback
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah" };
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah" };
       const isKopi = canvas.uvp.toLowerCase().includes("kopi") || canvas.problem.toLowerCase().includes("kopi");
       const isHealth = canvas.uvp.toLowerCase().includes("health") || canvas.problem.toLowerCase().includes("sehat");
 
@@ -1438,16 +1690,16 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       throw new Error("Kredit tidak mencukupi untuk perancangan pitch deck.");
     }
 
-    const workspacePersonas = personas[workspaceId] || [];
+    const workspacePersonas = personasRef.current[workspaceId] || [];
     const persona = workspacePersonas.find(p => p.id === personaId);
-    const workspacePositioning = positioningDocs[workspaceId] || [];
+    const workspacePositioning = positioningDocsRef.current[workspaceId] || [];
     const positioning = workspacePositioning.find(p => p.personaId === personaId);
 
     if (!persona || !positioning) return;
 
     try {
-      const canvas = canvasData[workspaceId] || { uvp: "Startup" };
-      const workspace = workspaces.find((w) => w.id === workspaceId);
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup" };
+      const workspace = workspacesRef.current.find((w) => w.id === workspaceId);
 
       const response = await fetch("/api/ai", {
         method: "POST",
@@ -1464,7 +1716,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        throw new Error(parseApiError(await response.text()));
       }
 
       const rawDeck = await response.json();
@@ -1487,9 +1739,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.warn("Real AI sales deck generation failed, falling back to mock:", err);
       // Mock Fallback
-      const ws = workspaces.find((w) => w.id === workspaceId);
+      const ws = workspacesRef.current.find((w) => w.id === workspaceId);
       const wsName = ws ? ws.name : "Startup";
-      const canvas = canvasData[workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi" };
+      const canvas = canvasDataRef.current[workspaceId] || { uvp: "Startup", problem: "Masalah", solution: "Solusi" };
       const isKopi = canvas.uvp.toLowerCase().includes("kopi") || canvas.problem.toLowerCase().includes("kopi");
       const isHealth = canvas.uvp.toLowerCase().includes("health") || canvas.problem.toLowerCase().includes("sehat");
 
@@ -1593,6 +1845,285 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     );
   };
 
+  // ============================================================
+  // NEW FEATURE FUNCTIONS
+  // ============================================================
+
+  const addContact = (contact: Omit<Contact, "id" | "workspaceId" | "createdAt">) => {
+    const newContact: Contact = {
+      ...contact,
+      id: `ct-${Math.random().toString(36).substring(2, 11)}`,
+      workspaceId: activeWorkspaceId,
+      createdAt: new Date().toISOString(),
+    };
+    setContacts((prev) => ({
+      ...prev,
+      [activeWorkspaceId]: [newContact, ...(prev[activeWorkspaceId] || [])]
+    }));
+    ds.upsertContact(newContact);
+  };
+
+  const updateContact = (workspaceId: string, contactId: string, updates: Partial<Contact>) => {
+    setContacts((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((c) => c.id === contactId ? { ...c, ...updates } : c)
+    }));
+    const contact = contacts[workspaceId]?.find(c => c.id === contactId);
+    if (contact) ds.upsertContact({ ...contact, ...updates });
+  };
+
+  const deleteContact = (workspaceId: string, contactId: string) => {
+    setContacts((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).filter((c) => c.id !== contactId)
+    }));
+    ds.deleteContact(contactId);
+  };
+
+  const addCalendarEvent = (event: Omit<CalendarEvent, "id" | "workspaceId" | "createdAt">) => {
+    const newEvent: CalendarEvent = {
+      ...event,
+      id: `cal-${Math.random().toString(36).substring(2, 11)}`,
+      workspaceId: activeWorkspaceId,
+      createdAt: new Date().toISOString(),
+    };
+    setCalendarEvents((prev) => ({
+      ...prev,
+      [activeWorkspaceId]: [newEvent, ...(prev[activeWorkspaceId] || [])]
+    }));
+    ds.upsertCalendarEvent(newEvent);
+  };
+
+  const updateCalendarEvent = (workspaceId: string, eventId: string, updates: Partial<CalendarEvent>) => {
+    setCalendarEvents((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((e) => e.id === eventId ? { ...e, ...updates } : e)
+    }));
+    const event = calendarEvents[workspaceId]?.find(e => e.id === eventId);
+    if (event) ds.upsertCalendarEvent({ ...event, ...updates });
+  };
+
+  const deleteCalendarEvent = (workspaceId: string, eventId: string) => {
+    setCalendarEvents((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).filter((e) => e.id !== eventId)
+    }));
+    ds.deleteCalendarEvent(eventId);
+  };
+
+  const completeCalendarEvent = (workspaceId: string, eventId: string) => {
+    setCalendarEvents((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((e) => e.id === eventId ? { ...e, isCompleted: true } : e)
+    }));
+    const event = calendarEvents[workspaceId]?.find(e => e.id === eventId);
+    if (event) ds.upsertCalendarEvent({ ...event, isCompleted: true });
+  };
+
+  const addNote = (note: Omit<VentureNote, "id" | "workspaceId" | "createdAt" | "updatedAt">) => {
+    const now = new Date().toISOString();
+    const newNote: VentureNote = {
+      ...note,
+      id: `note-${Math.random().toString(36).substring(2, 11)}`,
+      workspaceId: activeWorkspaceId,
+      createdAt: now,
+      updatedAt: now,
+    };
+    setNotes((prev) => ({
+      ...prev,
+      [activeWorkspaceId]: [newNote, ...(prev[activeWorkspaceId] || [])]
+    }));
+    ds.upsertNote(newNote);
+  };
+
+  const updateNote = (workspaceId: string, noteId: string, updates: Partial<VentureNote>) => {
+    setNotes((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((n) => n.id === noteId ? { ...n, ...updates, updatedAt: new Date().toISOString() } : n)
+    }));
+    const note = notes[workspaceId]?.find(n => n.id === noteId);
+    if (note) ds.upsertNote({ ...note, ...updates, updatedAt: new Date().toISOString() });
+  };
+
+  const deleteNote = (workspaceId: string, noteId: string) => {
+    setNotes((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).filter((n) => n.id !== noteId)
+    }));
+    ds.deleteNote(noteId);
+  };
+
+  const togglePinNote = (workspaceId: string, noteId: string) => {
+    setNotes((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((n) => n.id === noteId ? { ...n, isPinned: !n.isPinned } : n)
+    }));
+    const note = notes[workspaceId]?.find(n => n.id === noteId);
+    if (note) ds.upsertNote({ ...note, isPinned: !note.isPinned });
+  };
+
+  const addGlossaryTerm = (term: Omit<GlossaryTerm, "id" | "workspaceId" | "createdAt">) => {
+    const newTerm: GlossaryTerm = {
+      ...term,
+      id: `glos-${Math.random().toString(36).substring(2, 11)}`,
+      workspaceId: activeWorkspaceId,
+      createdAt: new Date().toISOString(),
+    };
+    setGlossaryTerms((prev) => ({
+      ...prev,
+      [activeWorkspaceId]: [newTerm, ...(prev[activeWorkspaceId] || [])]
+    }));
+    ds.upsertGlossaryTerm(newTerm);
+  };
+
+  const updateGlossaryTerm = (workspaceId: string, termId: string, updates: Partial<GlossaryTerm>) => {
+    setGlossaryTerms((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((t) => t.id === termId ? { ...t, ...updates } : t)
+    }));
+    const term = glossaryTerms[workspaceId]?.find(t => t.id === termId);
+    if (term) ds.upsertGlossaryTerm({ ...term, ...updates });
+  };
+
+  const deleteGlossaryTerm = (workspaceId: string, termId: string) => {
+    setGlossaryTerms((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).filter((t) => t.id !== termId)
+    }));
+    ds.deleteGlossaryTerm(termId);
+  };
+
+  const autoDetectTermsFromTranscript = async (workspaceId: string, projectId: string): Promise<void> => {
+    const project = researchProjectsRef.current.find((p) => p.id === projectId);
+    if (!project) return;
+
+    const projectInterviews = interviewsRef.current.filter(i => i.researchProjectId === projectId && i.status === "completed");
+
+    try {
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "auto-detect-terms",
+          data: {
+            transcripts: projectInterviews.map(i => i.transcriptText),
+            existingTerms: (glossaryTerms[workspaceId] || []).map(t => t.term)
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(parseApiError(await response.text()));
+      }
+
+      const detectedTerms: { term: string; definition: string; category: string }[] = await response.json();
+
+      for (const detected of detectedTerms) {
+        const newTerm: GlossaryTerm = {
+          id: `glos-${Math.random().toString(36).substring(2, 11)}`,
+          workspaceId,
+          term: detected.term,
+          definition: detected.definition,
+          category: detected.category || "general",
+          sourceInterviewId: projectInterviews[0]?.id || "",
+          sourceProjectId: projectId,
+          isAutoDetected: true,
+          createdAt: new Date().toISOString(),
+        };
+        setGlossaryTerms((prev) => ({
+          ...prev,
+          [workspaceId]: [newTerm, ...(prev[workspaceId] || [])]
+        }));
+        ds.upsertGlossaryTerm(newTerm);
+      }
+    } catch (err) {
+      console.warn("Auto-detect terms failed, falling back to mock:", err);
+      // Mock fallback
+      const mockTerms: GlossaryTerm[] = [
+        {
+          id: `glos-${Math.random().toString(36).substring(2, 11)}`,
+          workspaceId,
+          term: "Downtime",
+          definition: "Periode ketika mesin atau sistem berhenti beroperasi karena kerusakan atau pemeliharaan, menyebabkan kerugian produktivitas dan finansial.",
+          category: "operational",
+          sourceInterviewId: projectInterviews[0]?.id || "",
+          sourceProjectId: projectId,
+          isAutoDetected: true,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: `glos-${Math.random().toString(36).substring(2, 11)}`,
+          workspaceId,
+          term: "Edge Computing",
+          definition: "Pemrosesan data di titik terdekat dengan sumber data (perangkat sensor/edge) tanpa harus mengirim ke server cloud pusat, mengurangi latensi.",
+          category: "technical",
+          sourceInterviewId: projectInterviews[0]?.id || "",
+          sourceProjectId: projectId,
+          isAutoDetected: true,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: `glos-${Math.random().toString(36).substring(2, 11)}`,
+          workspaceId,
+          term: "Telemetri",
+          definition: "Pengumpulan data pengukuran jarak jauh dari sensor perangkat IoT dan transmisi ke sistem pemantauan untuk analisis.",
+          category: "technical",
+          sourceInterviewId: projectInterviews[0]?.id || "",
+          sourceProjectId: projectId,
+          isAutoDetected: true,
+          createdAt: new Date().toISOString(),
+        },
+      ];
+
+      for (const term of mockTerms) {
+        setGlossaryTerms((prev) => ({
+          ...prev,
+          [workspaceId]: [term, ...(prev[workspaceId] || [])]
+        }));
+        ds.upsertGlossaryTerm(term);
+      }
+    }
+  };
+
+  const addAnalysisReport = (report: Omit<AnalysisReport, "id" | "workspaceId" | "createdAt">) => {
+    const newReport: AnalysisReport = {
+      ...report,
+      id: `anal-${Math.random().toString(36).substring(2, 11)}`,
+      workspaceId: activeWorkspaceId,
+      createdAt: new Date().toISOString(),
+    };
+    setAnalysisReports((prev) => ({
+      ...prev,
+      [activeWorkspaceId]: [newReport, ...(prev[activeWorkspaceId] || [])]
+    }));
+    ds.upsertAnalysisReport(newReport);
+  };
+
+  const updateAnalysisReport = (workspaceId: string, reportId: string, updates: Partial<AnalysisReport>) => {
+    setAnalysisReports((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).map((r) => r.id === reportId ? { ...r, ...updates } : r)
+    }));
+    const report = analysisReports[workspaceId]?.find(r => r.id === reportId);
+    if (report) ds.upsertAnalysisReport({ ...report, ...updates });
+  };
+
+  const deleteAnalysisReport = (workspaceId: string, reportId: string) => {
+    setAnalysisReports((prev) => ({
+      ...prev,
+      [workspaceId]: (prev[workspaceId] || []).filter((r) => r.id !== reportId)
+    }));
+    ds.deleteAnalysisReport(reportId);
+  };
+
+  const saveInterviewScripts = (workspaceId: string, sections: ScriptSection[]) => {
+    setInterviewScripts((prev) => ({
+      ...prev,
+      [workspaceId]: sections
+    }));
+    ds.saveInterviewScripts(workspaceId, sections);
+  };
+
   return (
     <WorkspaceContext.Provider
       value={{
@@ -1613,6 +2144,13 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         landingPages,
         salesDecks,
         subscriptionPlans,
+        contacts,
+        calendarEvents,
+        notes,
+        glossaryTerms,
+        analysisReports,
+        interviewScripts,
+        isDataLoaded,
         createWorkspace,
         switchWorkspace,
         updateStartingPath,
@@ -1634,7 +2172,26 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         updatePersona,
         upgradeSubscription,
         purchaseCredits,
-        updateWorkspaceDetails
+        updateWorkspaceDetails,
+        addContact,
+        updateContact,
+        deleteContact,
+        addCalendarEvent,
+        updateCalendarEvent,
+        deleteCalendarEvent,
+        completeCalendarEvent,
+        addNote,
+        updateNote,
+        deleteNote,
+        togglePinNote,
+        addGlossaryTerm,
+        updateGlossaryTerm,
+        deleteGlossaryTerm,
+        autoDetectTermsFromTranscript,
+        addAnalysisReport,
+        updateAnalysisReport,
+        deleteAnalysisReport,
+        saveInterviewScripts
       }}
     >
       {children}

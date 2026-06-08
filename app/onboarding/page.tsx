@@ -19,7 +19,7 @@ export default function OnboardingPage() {
       icon: "lightbulb",
       badge: "Pre-validation",
       color: "border-primary hover:border-primary",
-      glowColor: "rgba(128, 131, 255, 0.2)",
+      glowColor: "rgba(167, 139, 250, 0.1)",
     },
     {
       name: "Find my idea",
@@ -27,7 +27,7 @@ export default function OnboardingPage() {
       icon: "search",
       badge: "Opportunity Scan",
       color: "border-secondary hover:border-secondary",
-      glowColor: "rgba(93, 230, 255, 0.2)",
+      glowColor: "rgba(52, 211, 153, 0.12)",
     },
     {
       name: "Grow my business",
@@ -35,7 +35,7 @@ export default function OnboardingPage() {
       icon: "trending_up",
       badge: "GTM Acceleration",
       color: "border-tertiary hover:border-tertiary",
-      glowColor: "rgba(128, 131, 255, 0.2)",
+      glowColor: "rgba(167, 139, 250, 0.1)",
     },
   ];
 
@@ -52,7 +52,7 @@ export default function OnboardingPage() {
     <div className="relative min-h-screen flex items-center justify-center bg-surface px-4 py-12">
       {/* Background decoration */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-30"></div>
+        <div className="absolute inset-0 opacity-30"></div>
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px]"></div>
       </div>
@@ -66,7 +66,7 @@ export default function OnboardingPage() {
               alt="Hipmipreneur Logo"
               width={64}
               height={64}
-              className="object-contain filter drop-shadow-[0_0_15px_rgba(128,131,255,0.5)]"
+              className="object-contain"
             />
           </div>
           <h1 className="font-headline text-3xl font-bold tracking-tight text-primary mt-2">Welcome to Hipmipreneur</h1>
@@ -76,7 +76,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Setup Form */}
-        <form onSubmit={handleSubmit} className="glass-panel rounded-2xl p-6 md:p-8 flex flex-col gap-8 shadow-2xl">
+        <form onSubmit={handleSubmit} className="glass-panel rounded-2xl p-6 md:p-8 flex flex-col gap-8 ">
           {/* Section 1: Venture Profile */}
           <div className="flex flex-col gap-4">
             <h3 className="font-headline text-lg font-bold text-on-surface flex items-center gap-2 border-b border-outline-glow/50 pb-2">
@@ -120,17 +120,13 @@ export default function OnboardingPage() {
                     key={idx}
                     type="button"
                     onClick={() => setSelectedPath(p.name)}
-                    className={`glass-panel p-5 rounded-xl border text-left flex flex-col gap-3 transition-all relative group cursor-pointer ${
-                      active
-                        ? "border-primary active-panel transform scale-[1.01]"
-                        : "border-outline-glow hover:border-on-surface-variant"
-                    }`}
+                    className={`glass-panel p-5 rounded-xl border text-left flex flex-col gap-3 transition-all relative group cursor-pointer ${ active ? "border-primary transform scale-[1.01]" : "border-outline-glow hover:border-on-surface-variant" }`}
                     style={{
                       boxShadow: active ? `inset 0 0 15px ${p.glowColor}, 0 0 15px ${p.glowColor}` : "none",
                     }}
                   >
                     <div className="flex justify-between items-center w-full">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${active ? "bg-primary text-surface-dim shadow-[0_0_15px_rgba(128,131,255,0.4)]" : "bg-surface-container-high text-primary"} transition-all`}>
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${active ? "bg-primary text-surface-dim shadow-[0_0_15px_rgba(167, 139, 250, 0.2)]" : "bg-surface-container-high text-primary"} transition-all`}>
                         <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0" }}>
                           {p.icon}
                         </span>
@@ -158,9 +154,7 @@ export default function OnboardingPage() {
             <button
               type="submit"
               disabled={!ventureName.trim()}
-              className={`px-8 py-3 bg-inverse-primary text-on-primary font-bold text-sm rounded-xl neon-glow-primary hover:bg-primary hover:text-on-primary hover:shadow-[0_0_30px_rgba(192,193,255,0.6)] active:scale-[0.98] transition-all flex items-center gap-2 cursor-pointer ${
-                !ventureName.trim() ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`px-8 py-3 bg-inverse-primary text-on-primary font-bold text-sm rounded-xl hover:bg-primary hover:text-on-primary hover:shadow-[0_0_30px_rgba(167, 139, 250, 0.4)] active:scale-[0.98] transition-all flex items-center gap-2 cursor-pointer ${ !ventureName.trim() ? "opacity-50 cursor-not-allowed" : "" }`}
             >
               <span>Launch Venture Hub</span>
               <span className="material-symbols-outlined text-sm">arrow_forward</span>

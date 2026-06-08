@@ -54,3 +54,7 @@ next-env.d.ts
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# clerk configuration (can include secrets)
+/.clerk/
+.superpowers/

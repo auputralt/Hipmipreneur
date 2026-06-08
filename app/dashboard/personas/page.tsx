@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useWorkspace } from "../../../context/WorkspaceContext";
 
 export default function PersonasPage() {
@@ -23,6 +23,14 @@ export default function PersonasPage() {
   const [editArchetype, setEditArchetype] = useState("");
   const [editQuote, setEditQuote] = useState("");
   const [editSummary, setEditSummary] = useState("");
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // BUG FIX: Clean up interval on unmount to prevent memory leak
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
 
   if (!activeWorkspace) {
     return (
@@ -51,8 +59,9 @@ export default function PersonasPage() {
   ];
 
   const handleGenerate = async () => {
-    if (!activeSegId || isGenerating) return;
-    
+    // BUG FIX: Guard against empty segment
+    if (!activeSegId || !workspaceSegments.length || isGenerating) return;
+
     setIsGenerating(true);
     setGenerationStep(0);
 
@@ -67,15 +76,16 @@ export default function PersonasPage() {
         }
       });
     }, 400);
+    intervalRef.current = interval;
 
     try {
       await generatePersona(activeWorkspace.id, activeSegId);
     } catch (err) {
-      clearInterval(interval);
       const errMsg = err instanceof Error ? err.message : String(err);
       alert(`Gagal membuat persona: ${errMsg || "Kredit tidak mencukupi."}`);
     } finally {
       clearInterval(interval);
+      intervalRef.current = null;
       setIsGenerating(false);
     }
   };
@@ -177,7 +187,7 @@ ${currentPersona.messagingAngles.map(item => `- ${item}`).join("\n")}
           /* AI Generating Progress Screen */
           <div className="glass-panel border border-outline-glow rounded-xl p-10 flex flex-col items-center justify-center text-center h-[500px] gap-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_30px_rgba(192,193,255,0.6)] animate-pulse">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_30px_rgba(167, 139, 250, 0.4)] animate-pulse">
                 <span className="material-symbols-outlined text-surface-dim font-bold text-3xl animate-spin">sync</span>
               </div>
               <span className="absolute bottom-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-surface-container"></span>
@@ -208,7 +218,7 @@ ${currentPersona.messagingAngles.map(item => `- ${item}`).join("\n")}
             <div className="lg:col-span-4 glass-panel border border-outline-glow rounded-xl p-5 flex flex-col gap-4 overflow-y-auto max-h-[600px] lg:max-h-[calc(100vh-170px)] lg:sticky lg:top-4">
               {/* Profile Avatar Card */}
               <div className="flex flex-col items-center text-center gap-3 border-b border-outline-glow/20 pb-4">
-                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-[0_0_20px_rgba(192,193,255,0.3)] bg-surface-container relative">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-[0_0_20px_rgba(167, 139, 250, 0.2)] bg-surface-container relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     alt={currentPersona.name}
@@ -384,7 +394,7 @@ ${currentPersona.messagingAngles.map(item => `- ${item}`).join("\n")}
             </div>
             <button
               onClick={handleGenerate}
-              className="mt-2 flex items-center gap-2 bg-primary text-surface-dim font-bold px-5 py-3 rounded-lg text-xs shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all cursor-pointer"
+              className="mt-2 flex items-center gap-2 bg-primary text-surface-dim font-bold px-5 py-3 rounded-lg text-xs transition-all cursor-pointer"
             >
               <span className="material-symbols-outlined text-base">smart_toy</span>
               <span>Buat Persona dengan AI (1,500 Kredit)</span>
@@ -396,7 +406,7 @@ ${currentPersona.messagingAngles.map(item => `- ${item}`).join("\n")}
       {/* Edit Modal */}
       {editModalOpen && (
         <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
-          <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+          <div className="bg-surface-container border border-outline-glow rounded-xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setEditModalOpen(false)}
               className="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors cursor-pointer"

@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const BLUESMIND_KEY = process.env.BLUESMIND_API_KEY;
-const BLUESMIND_URL = process.env.BLUESMIND_API_URL || "https://api.bluesminds.com";
+const BLUESMIND_URL = process.env.BLUESMIND_BASE_URL || process.env.BLUESMIND_API_URL || "https://api.bluesminds.com";
+
+// Free model for OpenRouter fallback (auto-routes to best available free model)
+const OPENROUTER_FREE_MODELS = [
+  "openrouter/free",
+];
 
 // Helper to extract JSON content even if wrapped in markdown code blocks
 function cleanAndParseJSON(text: string) {
@@ -22,40 +27,7 @@ function cleanAndParseJSON(text: string) {
 async function callLLM(systemPrompt: string, userPrompt: string) {
   let errorMsg = "";
 
-  // 1. Try OpenRouter (Primary)
-  try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENROUTER_KEY}`,
-        "HTTP-Referer": "https://hipmipreneur.com",
-        "X-Title": "Hipmipreneur"
-      },
-      body: JSON.stringify({
-        model: "openrouter/free",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ]
-      })
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content) return content;
-    } else {
-      errorMsg = `OpenRouter returned status ${response.status}: ${await response.text()}`;
-      console.warn("OpenRouter failed, falling back to BluesMind:", errorMsg);
-    }
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    errorMsg = `OpenRouter error: ${msg}`;
-    console.warn("OpenRouter failed, falling back to BluesMind:", errorMsg);
-  }
-
-  // 2. Try BluesMind (Fallback)
+  // 1. Try BluesMind (Primary)
   try {
     const response = await fetch(`${BLUESMIND_URL}/v1/chat/completions`, {
       method: "POST",
@@ -77,12 +49,48 @@ async function callLLM(systemPrompt: string, userPrompt: string) {
       const content = data.choices?.[0]?.message?.content;
       if (content) return content;
     } else {
-      throw new Error(`BluesMind returned status ${response.status}: ${await response.text()}`);
+      errorMsg = `BluesMind returned status ${response.status}`;
+      console.warn("BluesMind failed, falling back to OpenRouter:", errorMsg);
     }
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    throw new Error(`Both LLM providers failed. Primary error: ${errorMsg}. Secondary error: ${msg}`);
+    errorMsg = `BluesMind error: ${msg}`;
+    console.warn("BluesMind failed, falling back to OpenRouter:", errorMsg);
   }
+
+  // 2. Try OpenRouter free models (Fallback)
+  for (const model of OPENROUTER_FREE_MODELS) {
+    try {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENROUTER_KEY}`,
+          "HTTP-Referer": "https://hipmipreneur.com",
+          "X-Title": "Hipmipreneur"
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ]
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) return content;
+      } else {
+        console.warn(`OpenRouter model ${model} failed with status ${response.status}, trying next...`);
+      }
+    } catch (e) {
+      console.warn(`OpenRouter model ${model} error:`, e instanceof Error ? e.message : String(e));
+    }
+  }
+
+  throw new Error(`Semua penyedia LLM gagal. Error terakhir: ${errorMsg}`);
 }
 
 export async function POST(req: Request) {
@@ -187,7 +195,7 @@ ${int.transcriptText}
         systemPrompt = `You are IVA (Hipmipreneur Virtual Assistant), a product marketing manager.
 Your task is to construct a detailed, dynamic buyer persona profile based on the startup's Lean Canvas and research insights.
 Respond ONLY with a valid JSON object in Indonesian. Do NOT include markdown formatting or conversational filler.
-The JSON must have precisely this structure:
+The JSON must have precisely the following structure:
 {
   "name": "string (appropriate Indonesian first name)",
   "archetype": "string (archetype label, e.g., 'The Tech-Forward Factory Owner')",
@@ -218,11 +226,11 @@ ${JSON.stringify(data.insights || {})}`;
         systemPrompt = `You are IVA (Hipmipreneur Virtual Assistant), a positioning and branding strategist.
 Your task is to write a comprehensive positioning and messaging guide for a startup based on its Lean Canvas and target buyer persona.
 Respond ONLY with a valid JSON object in Indonesian. Do NOT include markdown formatting or conversational filler.
-The JSON must have precisely this structure:
+The JSON must have precisely the following structure:
 {
   "corePositioning": "string (a standard elevator positioning statement matching this format: 'Untuk [Target Persona] yang mengalami [Masalah Utama], [Nama Produk/Workspace] adalah [Kategori Produk] yang menyediakan [UVP]. Berbeda dengan [Kompetitor/Alternatif], kami [Unfair Advantage/Pembeda].')",
   "targetAudience": "string (detailed description of primary buyer roles and secondary stakeholders)",
-  "marketContext": "string (current market category and статус quo inefficiencies)",
+  "marketContext": "string (current market category and status quo inefficiencies)",
   "uvp": "string (unique value proposition)",
   "brandVoice": "string (3-4 comma-separated brand personality traits, e.g., 'Merakyat, Solutif, Jujur, Transparan')",
   "reasonsToBelieve": "array of 3 strings (concrete proof points or features that justify the positioning)",
@@ -248,7 +256,7 @@ Target Buyer Persona:
         systemPrompt = `You are IVA (Hipmipreneur Virtual Assistant), an expert landing page copywriter.
 Your task is to generate high-converting landing page copy based on the startup's positioning and buyer persona.
 Respond ONLY with a valid JSON object in Indonesian. Do NOT include markdown formatting or conversational filler.
-The JSON must have precisely this structure:
+The JSON must have precisely the following structure:
 {
   "heroHeadline": "string (powerful, benefit-driven headline addressing the persona's core pain)",
   "heroSubheadline": "string (clear subheadline explaining how the UVP works to deliver the desired outcome)",
@@ -270,7 +278,7 @@ Messaging Pillars: ${JSON.stringify(data.positioning.messagingPillars)}`;
         systemPrompt = `You are IVA (Hipmipreneur Virtual Assistant), a pitch deck designer and sales consultant.
 Your task is to generate a structured 5-slide sales pitch outline optimized for the target persona.
 Respond ONLY with a valid JSON object containing a slides array. Do NOT include markdown formatting or conversational filler.
-The JSON must have precisely this structure:
+The JSON must have precisely the following structure:
 {
   "slides": [
     {
@@ -290,6 +298,54 @@ Elevator Pitch: ${data.positioning.elevatorPitch}`;
         break;
       }
 
+      case "auto-detect-terms": {
+        systemPrompt = `You are IVA (Hipmipreneur Virtual Assistant), a research analyst specialized in qualitative data analysis.
+Your task is to scan interview transcripts in Indonesian and extract key domain-specific terms, jargon, and technical vocabulary that should be documented in a research glossary.
+Respond ONLY with a valid JSON array of objects. Do NOT include markdown formatting or conversational filler.
+Each object must have precisely this structure:
+{
+  "term": "string (the exact term or phrase found in the transcripts, in the original language used)",
+  "definition": "string (clear Indonesian definition of the term as it relates to the startup/venture context)",
+  "category": "string (one of: 'technical', 'operational', 'business', 'market', 'general')"
+}
+Extract 3-8 most important terms. Skip terms that are too common (e.g., "masalah", "solusi", "kerja") unless they have a specific technical meaning in context.`;
+        userPrompt = `Analyze these interview transcripts and extract important domain-specific terms and jargon for a research glossary:
+${data.transcripts.map((t: string, idx: number) => `
+--- TRANSCRIPT #${idx + 1} ---
+${t}
+`).join("\n")}
+
+${data.existingTerms && data.existingTerms.length > 0 ? `\nExisting glossary terms to skip (already defined): ${data.existingTerms.join(", ")}` : ""}`;
+        break;
+      }
+
+      case "generate-analysis": {
+        systemPrompt = `You are IVA (Hipmipreneur Virtual Assistant), a senior venture analyst.
+Your task is to generate a cross-research analysis report comparing multiple research projects. Analyze patterns, calculate validation signal strengths, and provide a strategic summary.
+Respond ONLY with a valid JSON object in Indonesian. Do NOT include markdown formatting or conversational filler.
+The JSON must have precisely the following structure:
+{
+  "validationSignals": [
+    {
+      "label": "string (short name for the validation signal, e.g. 'Problem Frequency', 'Solution Interest')",
+      "value": "number (integer percentage 0-100 representing signal strength)",
+      "description": "string (detailed explanation of what this signal means and the evidence supporting it)"
+    }
+  ],
+  "summary": "string (2-3 paragraph strategic summary of the analysis, highlighting key findings, areas of strong validation, and recommended next steps)"
+}`;
+        userPrompt = `Generate a ${data.comparisonType} analysis report for the following research projects:
+${data.projects.map((p: { id: string; name: string; type: string; segmentId: string; status: string }, idx: number) => `
+--- PROJECT #${idx + 1}: ${p.name} ---
+Type: ${p.type}
+Status: ${p.status}
+${data.insightReports?.[p.id] ? `Insight Report: ${JSON.stringify(data.insightReports[p.id])}` : "No insight report yet."}
+`).join("\n")}
+
+Analysis type: ${data.comparisonType === "cross_research" ? "Cross-Research Comparison" : data.comparisonType === "validation_signals" ? "Validation Signal Analysis" : "Market Fit Evaluation"}`;
+        break;
+      }
+
       default:
         return NextResponse.json({ error: `Invalid action: ${action}` }, { status: 400 });
     }
@@ -300,8 +356,11 @@ Elevator Pitch: ${data.positioning.elevatorPitch}`;
 
     return NextResponse.json(parsedData);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Internal Server Error";
+    // BUG FIX: Sanitize error messages — don't leak internal provider details to client
     console.error("AI route error:", err);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json(
+      { error: "Terjadi kesalahan pada layanan AI. Silakan coba lagi." },
+      { status: 500 }
+    );
   }
 }

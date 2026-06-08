@@ -18,6 +18,7 @@ export default function BuilderPage() {
   const { activeWorkspace, canvasData, updateCanvasSection, completedTasks, completeTask } = useWorkspace();
   const [activeTaskIndex, setActiveTaskIndex] = useState(0);
   const [formInputs, setFormInputs] = useState<Record<string, string>>({});
+  const [isSaving, setIsSaving] = useState(false);
 
   const canvas = activeWorkspace ? canvasData[activeWorkspace.id] : null;
 
@@ -87,22 +88,28 @@ export default function BuilderPage() {
   };
 
   const handleSaveAndProceed = () => {
-    if (!activeWorkspace) return;
+    if (!activeWorkspace || isSaving) return;
 
-    // Save inputs to context canvas
-    currentTask.fields.forEach((field) => {
-      const val = getFieldValue(field.key);
-      updateCanvasSection(activeWorkspace.id, field.key, val);
-    });
+    setIsSaving(true);
 
-    // Mark task complete
-    completeTask(currentTask.taskId);
+    try {
+      // Save inputs to context canvas
+      currentTask.fields.forEach((field) => {
+        const val = getFieldValue(field.key);
+        updateCanvasSection(activeWorkspace.id, field.key, val);
+      });
 
-    // Proceed to next task if available
-    if (activeTaskIndex < builderTasks.length - 1) {
-      setActiveTaskIndex(activeTaskIndex + 1);
-    } else {
-      alert("Hebat! Anda telah menyelesaikan keempat Tugas Builder Utama. Model bisnis Anda kini kokoh untuk divalidasi.");
+      // Mark task complete
+      completeTask(currentTask.taskId);
+
+      // Proceed to next task if available
+      if (activeTaskIndex < builderTasks.length - 1) {
+        setActiveTaskIndex(activeTaskIndex + 1);
+      } else {
+        alert("Hebat! Anda telah menyelesaikan keempat Tugas Builder Utama. Model bisnis Anda kini kokoh untuk divalidasi.");
+      }
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -167,24 +174,12 @@ export default function BuilderPage() {
           const isActive = idx === activeTaskIndex;
           return (
             <React.Fragment key={t.id}>
-              {idx > 0 && <div className="h-[2px] flex-1 min-w-[30px] bg-outline-glow/50 circuit-line"></div>}
+              {idx > 0 && <div className="h-[2px] flex-1 min-w-[30px] bg-outline-glow/50 "></div>}
               <button
                 onClick={() => setActiveTaskIndex(idx)}
-                className={`flex items-center gap-3 p-3 rounded-lg border transition-all text-left shrink-0 cursor-pointer ${
-                  isActive
-                    ? "bg-primary/10 border-primary text-primary active-panel"
-                    : isCompleted
-                    ? "bg-surface-container border-secondary/40 text-secondary"
-                    : "bg-surface-container-lowest/30 border-outline-glow/40 text-on-surface-variant hover:border-outline-glow"
-                }`}
+                className={`flex items-center gap-3 p-3 rounded-lg border transition-all text-left shrink-0 cursor-pointer ${ isActive ? "bg-primary/10 border-primary text-primary " : isCompleted ? "bg-surface-container border-secondary/40 text-secondary" : "bg-surface-container-lowest/30 border-outline-glow/40 text-on-surface-variant hover:border-outline-glow" }`}
               >
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-bold ${
-                  isActive
-                    ? "bg-primary text-surface-dim shadow-[0_0_10px_rgba(192,193,255,0.4)]"
-                    : isCompleted
-                    ? "bg-secondary text-surface-dim"
-                    : "bg-surface-container-highest border border-outline-glow"
-                }`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-bold ${ isActive ? "bg-primary text-surface-dim " : isCompleted ? "bg-secondary text-surface-dim" : "bg-surface-container-highest border border-outline-glow" }`}>
                   {isCompleted ? <span className="material-symbols-outlined text-xs font-bold">check</span> : t.id}
                 </div>
                 <div>
@@ -252,7 +247,8 @@ export default function BuilderPage() {
               </button>
               <button
                 onClick={handleSaveAndProceed}
-                className="px-5 py-2.5 bg-primary text-surface-dim font-bold rounded-lg text-xs shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all cursor-pointer"
+                disabled={isSaving}
+                className="px-5 py-2.5 bg-primary text-surface-dim font-bold rounded-lg text-xs transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {activeTaskIndex === builderTasks.length - 1 ? "Selesaikan Rencana" : "Simpan & Lanjutkan"}
               </button>

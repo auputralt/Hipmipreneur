@@ -2,7 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useWorkspace } from "../../../../context/WorkspaceContext";
+import * as ds from "../../../../lib/dataService";
+
+interface PublicProject {
+  id: string;
+  name: string;
+  type: string;
+  segmentId: string;
+}
 
 interface ChatMessage {
   sender: "iva" | "respondent";
@@ -12,24 +19,47 @@ interface ChatMessage {
 export default function PublicInterviewPage() {
   const params = useParams();
   const router = useRouter();
-  const { researchProjects, addInterviewTranscript } = useWorkspace();
   const projectId = params?.id as string;
 
-  const project = researchProjects.find((p) => p.id === projectId);
+  const [project, setProject] = useState<PublicProject | null>(null);
+  const [isLoadingProject, setIsLoadingProject] = useState(true);
 
   // Flow State
   const [step, setStep] = useState<"onboarding" | "chat" | "completed">("onboarding");
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
-  
+
   // Chat States
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [isIvaTyping, setIsIvaTyping] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isVoiceMockActive, setIsVoiceMockActive] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Load project directly from Supabase (no Clerk auth needed)
+  useEffect(() => {
+    if (!projectId) return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const data = await ds.loadPublicProject(projectId);
+        if (!cancelled && data) {
+          setProject(data);
+        }
+      } catch (err) {
+        console.warn("Failed to load public project:", err);
+      } finally {
+        if (!cancelled) setIsLoadingProject(false);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [projectId]);
 
   const interviewQuestions = [
     "Halo! Saya **IVA**, asisten AI yang memandu riset ini. Bisa ceritakan apa kesibukan pekerjaan Anda sehari-hari secara singkat?",
@@ -45,7 +75,6 @@ export default function PublicInterviewPage() {
     setStep("chat");
     setIsIvaTyping(true);
 
-    // Initial Welcome Message
     setTimeout(() => {
       setChatMessages([
         { sender: "iva", text: `Halo ${name}! Terima kasih banyak atas kesediaan Anda meluangkan waktu untuk berpartisipasi dalam riset validasi kami.` },
@@ -58,25 +87,22 @@ export default function PublicInterviewPage() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentInput.trim() || isIvaTyping) return;
+    if (!currentInput.trim() || isIvaTyping || questionIndex >= interviewQuestions.length) return;
 
     const userText = currentInput;
     setCurrentInput("");
 
-    // Add Respondent Message
     setChatMessages((prev) => [...prev, { sender: "respondent", text: userText }]);
 
     if (questionIndex < interviewQuestions.length) {
       setIsIvaTyping(true);
-      
-      // Simulate IVA Typing
+
       setTimeout(() => {
         setChatMessages((prev) => [...prev, { sender: "iva", text: interviewQuestions[questionIndex] }]);
         setIsIvaTyping(false);
         setQuestionIndex(questionIndex + 1);
       }, 1500);
     } else {
-      // Last response, finish
       setIsIvaTyping(true);
       setTimeout(() => {
         setChatMessages((prev) => [
@@ -89,23 +115,49 @@ export default function PublicInterviewPage() {
     }
   };
 
-  const handleSubmitInterview = () => {
+  const handleSubmitInterview = async () => {
     if (!project) return;
 
-    // Build readable transcript
+    setIsSubmitting(true);
+
     const transcriptText = chatMessages
       .map((msg) => `${msg.sender === "iva" ? "IVA" : name}: ${msg.text}`)
       .join("\n\n");
 
-    // Add to state
-    addInterviewTranscript(project.id, name, role || "Responden Publik", transcriptText, false);
-    setStep("completed");
+    try {
+      // Submit directly to Supabase (no WorkspaceContext needed)
+      await ds.submitPublicInterview({
+        id: `int-pub-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 9)}`,
+        researchProjectId: project.id,
+        workspaceId: "", // Will be filled by trigger or known from project
+        respondentName: name,
+        jobRole: role || "Responden Publik",
+        transcriptText,
+      });
+      setStep("completed");
+    } catch (err) {
+      console.error("Failed to submit interview:", err);
+      alert("Gagal mengirim wawancara. Silakan coba lagi.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Scroll to bottom helper
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages, isIvaTyping]);
+
+  if (isLoadingProject) {
+    return (
+      <div className="min-h-screen bg-surface-deep flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+          <p className="text-xs text-on-surface-variant font-mono">Memuat sesi riset...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -118,9 +170,9 @@ export default function PublicInterviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-deep bg-grid-pattern flex flex-col justify-center items-center p-4">
+    <div className="min-h-screen bg-surface-deep flex flex-col justify-center items-center p-4">
       {/* Container Card */}
-      <div className="w-full max-w-xl bg-surface-container border border-outline-glow rounded-2xl shadow-2xl flex flex-col overflow-hidden h-[600px]">
+      <div className="w-full max-w-xl bg-surface-container border border-outline-glow rounded-2xl flex flex-col overflow-hidden h-[600px]">
         {/* Top Branding Header */}
         <header className="bg-surface-container-high/70 border-b border-outline-glow/30 px-5 py-4 flex justify-between items-center shrink-0">
           <div className="flex items-center gap-2.5">
@@ -196,11 +248,7 @@ export default function PublicInterviewPage() {
                       </div>
                     )}
                     <div
-                      className={`p-3 rounded-xl text-xs leading-relaxed ${
-                        isIva
-                          ? "bg-surface-container-low border border-outline-glow/50 text-on-surface rounded-bl-none font-body"
-                          : "bg-primary text-surface-dim rounded-br-none font-sans font-semibold shadow-md"
-                      }`}
+                      className={`p-3 rounded-xl text-xs leading-relaxed ${ isIva ? "bg-surface-container-low border border-outline-glow/50 text-on-surface rounded-bl-none font-body" : "bg-primary text-surface-dim rounded-br-none font-sans font-semibold shadow-md" }`}
                     >
                       <p className="whitespace-pre-line">{msg.text}</p>
                     </div>
@@ -226,9 +274,17 @@ export default function PublicInterviewPage() {
               {questionIndex > interviewQuestions.length && !isIvaTyping ? (
                 <button
                   onClick={handleSubmitInterview}
-                  className="w-full py-2.5 bg-secondary text-surface-dim font-bold rounded-xl text-xs hover:bg-secondary-fixed transition-all cursor-pointer font-headline shadow-lg text-center"
+                  disabled={isSubmitting}
+                  className="w-full py-2.5 bg-secondary text-surface-dim font-bold rounded-xl text-xs hover:bg-secondary-fixed transition-all cursor-pointer font-headline shadow-lg text-center disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Kirim Wawancara Anda
+                  {isSubmitting ? (
+                    <>
+                      <span className="material-symbols-outlined text-sm animate-spin">sync</span>
+                      Mengirim...
+                    </>
+                  ) : (
+                    "Kirim Wawancara Anda"
+                  )}
                 </button>
               ) : (
                 <form onSubmit={handleSendMessage} className="flex gap-2">
@@ -241,11 +297,7 @@ export default function PublicInterviewPage() {
                         setCurrentInput("Tentu, saya sangat tertarik karena kami butuh solusi yang cepat.");
                       }
                     }}
-                    className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all cursor-pointer ${
-                      isVoiceMockActive
-                        ? "bg-error border-error text-white animate-pulse"
-                        : "bg-surface-container-low border-outline-glow hover:border-primary text-on-surface-variant"
-                    }`}
+                    className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all cursor-pointer ${ isVoiceMockActive ? "bg-error border-error text-white " : "bg-surface-container-low border-outline-glow hover:border-primary text-on-surface-variant" }`}
                     title="Gunakan Input Suara (Mock)"
                   >
                     <span className="material-symbols-outlined text-base">mic</span>
@@ -275,7 +327,7 @@ export default function PublicInterviewPage() {
         {/* STEP 3: COMPLETED */}
         {step === "completed" && (
           <div className="flex-1 p-6 flex flex-col justify-center items-center text-center max-w-sm mx-auto w-full gap-4">
-            <div className="w-16 h-16 rounded-full bg-secondary/15 border border-secondary/30 flex items-center justify-center text-secondary shadow-[0_0_20px_rgba(93,230,255,0.2)] animate-bounce">
+            <div className="w-16 h-16 rounded-full bg-secondary/15 border border-secondary/30 flex items-center justify-center text-secondary shadow-[0_0_20px_rgba(52, 211, 153, 0.12)] animate-bounce">
               <span className="material-symbols-outlined text-3xl font-bold">check_circle</span>
             </div>
             <div className="space-y-1.5">

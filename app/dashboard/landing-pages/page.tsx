@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useWorkspace, LandingPageAsset } from "../../../context/WorkspaceContext";
+import { useWorkspace, LandingPageAsset, escapeHtml } from "../../../context/WorkspaceContext";
 
 export default function LandingPagesPage() {
   const {
@@ -98,24 +98,24 @@ export default function LandingPagesPage() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${currentLp.heroHeadline}</title>
+    <title>${escapeHtml(currentLp.heroHeadline)}</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0c1324] text-[#dce2fa] min-h-screen font-sans">
     <!-- Navigation -->
     <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center border-b border-gray-800">
-        <div class="font-bold text-xl text-[#c0c1ff]">${activeWorkspace.name}</div>
-        <a href="#" class="bg-[#c0c1ff] text-[#1000a9] px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition-all">${currentLp.ctaText}</a>
+        <div class="font-bold text-xl text-[#c0c1ff]">${escapeHtml(activeWorkspace.name)}</div>
+        <a href="#" class="bg-[#c0c1ff] text-[#1000a9] px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition-all">${escapeHtml(currentLp.ctaText)}</a>
     </nav>
 
     <!-- Hero -->
     <header class="max-w-4xl mx-auto text-center px-6 py-20 space-y-6">
-        <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#c0c1ff] to-[#5de6ff] leading-tight">${currentLp.heroHeadline}</h1>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">${currentLp.heroSubheadline}</p>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#c0c1ff] to-[#5de6ff] leading-tight">${escapeHtml(currentLp.heroHeadline)}</h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto">${escapeHtml(currentLp.heroSubheadline)}</p>
         <div>
-            <button class="bg-[#5de6ff] text-[#00363e] px-8 py-3.5 rounded-lg font-bold text-base hover:opacity-90 transition-all shadow-[0_0_20px_rgba(93,230,255,0.3)]">${currentLp.ctaText}</button>
+            <button class="bg-[#5de6ff] text-[#00363e] px-8 py-3.5 rounded-lg font-bold text-base hover:opacity-90 transition-all shadow-[0_0_20px_rgba(52, 211, 153, 0.2)]">${escapeHtml(currentLp.ctaText)}</button>
         </div>
-        <p class="text-xs text-gray-500 font-mono">${currentLp.socialProof}</p>
+        <p class="text-xs text-gray-500 font-mono">${escapeHtml(currentLp.socialProof)}</p>
     </header>
 
     <!-- Features -->
@@ -124,8 +124,8 @@ export default function LandingPagesPage() {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             ${currentLp.features.map(f => `
             <div class="bg-[#181f31] p-6 rounded-xl border border-gray-800 space-y-3">
-                <h3 class="font-bold text-lg text-[#5de6ff]">${f.title}</h3>
-                <p class="text-sm text-gray-400 leading-relaxed">${f.description}</p>
+                <h3 class="font-bold text-lg text-[#5de6ff]">${escapeHtml(f.title)}</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">${escapeHtml(f.description)}</p>
             </div>
             `).join("")}
         </div>
@@ -137,8 +137,8 @@ export default function LandingPagesPage() {
         <div class="space-y-6">
             ${currentLp.faq.map(faq => `
             <div class="space-y-2">
-                <h4 class="font-bold text-base text-[#c0c1ff]">${faq.question}</h4>
-                <p class="text-sm text-gray-400 leading-relaxed">${faq.answer}</p>
+                <h4 class="font-bold text-base text-[#c0c1ff]">${escapeHtml(faq.question)}</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">${escapeHtml(faq.answer)}</p>
             </div>
             `).join("")}
         </div>
@@ -210,7 +210,7 @@ export default function LandingPagesPage() {
           /* AI Progress Loader */
           <div className="glass-panel border border-outline-glow rounded-xl p-10 flex flex-col items-center justify-center text-center h-[500px] gap-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_30px_rgba(192,193,255,0.6)] animate-pulse">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_30px_rgba(167, 139, 250, 0.4)] animate-pulse">
                 <span className="material-symbols-outlined text-surface-dim font-bold text-3xl animate-spin">sync</span>
               </div>
               <span className="absolute bottom-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-surface-container"></span>
@@ -378,7 +378,7 @@ export default function LandingPagesPage() {
               </div>
 
               {/* Rendered Browser Page Box */}
-              <div className="flex-1 bg-surface-deep border border-outline-glow rounded-xl overflow-hidden min-h-[400px] flex flex-col items-stretch justify-start relative bg-grid-pattern opacity-95">
+              <div className="flex-1 bg-surface-deep border border-outline-glow rounded-xl overflow-hidden min-h-[400px] flex flex-col items-stretch justify-start relative opacity-95">
                 <div 
                   className={`w-full h-full p-6 overflow-y-auto custom-scrollbar flex flex-col gap-10 transition-all duration-300 ${previewMode === "mobile" ? "max-w-[360px] border-x border-outline-glow/50 bg-[#070e1e] mx-auto" : "max-w-full"}`}
                 >
@@ -393,14 +393,14 @@ export default function LandingPagesPage() {
 
                   {/* Mock Hero Section */}
                   <div className="text-center py-6 space-y-4 shrink-0">
-                    <h2 className="font-headline text-gradient font-black text-lg leading-tight md:text-xl max-w-lg mx-auto">
+                    <h2 className="font-headline font-black text-lg leading-tight md:text-xl max-w-lg mx-auto">
                       {currentLp.heroHeadline}
                     </h2>
                     <p className="text-[10px] text-on-surface-variant/90 leading-relaxed max-w-sm mx-auto font-body">
                       {currentLp.heroSubheadline}
                     </p>
                     <div className="pt-2">
-                      <button className="bg-secondary text-surface-dim font-headline font-bold text-[10px] px-6 py-2.5 rounded-lg neon-glow-secondary cursor-pointer hover:scale-[1.02] transition-transform">
+                      <button className="bg-secondary text-surface-dim font-headline font-bold text-[10px] px-6 py-2.5 rounded-lg cursor-pointer hover:scale-[1.02] transition-transform">
                         {currentLp.ctaText}
                       </button>
                     </div>
@@ -453,7 +453,7 @@ export default function LandingPagesPage() {
             </div>
             <button
               onClick={handleGenerate}
-              className="mt-2 flex items-center gap-2 bg-primary text-surface-dim font-bold px-5 py-3 rounded-lg text-xs shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all cursor-pointer font-sans"
+              className="mt-2 flex items-center gap-2 bg-primary text-surface-dim font-bold px-5 py-3 rounded-lg text-xs transition-all cursor-pointer font-sans"
             >
               <span className="material-symbols-outlined text-base">smart_toy</span>
               <span>Buat Landing Page (2,000 Kredit)</span>
@@ -465,7 +465,7 @@ export default function LandingPagesPage() {
       {/* Lovable/Framer Mockup Modal */}
       {externalBuilderOpen && (
         <div className="fixed inset-0 bg-surface-deep/85 backdrop-blur-md flex items-center justify-center z-50 p-4 font-sans">
-          <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full p-6 relative text-center flex flex-col items-center gap-4">
+          <div className="bg-surface-container border border-outline-glow rounded-xl max-w-md w-full p-6 relative text-center flex flex-col items-center gap-4">
             <button
               onClick={() => setExternalBuilderOpen(false)}
               className="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
@@ -495,7 +495,8 @@ export default function LandingPagesPage() {
 
             <button
               onClick={() => {
-                alert("GTM Integrasi: 'Ekspor data sukses! Membuka tab Lovable baru dengan draft layout Anda...'");
+                // Copy the same HTML to clipboard for user to paste into their builder
+                copyHtmlCode();
                 setExternalBuilderOpen(false);
               }}
               className="w-full py-2.5 bg-secondary text-surface-dim font-headline font-bold rounded-lg text-xs hover:bg-secondary-fixed transition-all cursor-pointer shadow-md"

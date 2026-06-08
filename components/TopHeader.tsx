@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useWorkspace } from "../context/WorkspaceContext";
 
 interface TopHeaderProps {
@@ -14,6 +14,27 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
   const [newWorkspaceName, setNewWorkspaceName] = useState("");
   const [newWorkspaceDesc, setNewWorkspaceDesc] = useState("");
   const [newWorkspaceType, setNewWorkspaceType] = useState("Develop my idea");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const stored = localStorage.getItem("hipmipreneur-theme") as "dark" | "light" | null;
+      if (stored) {
+        setTheme(stored);
+      } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+        setTheme("light");
+      }
+    } catch {}
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("hipmipreneur-theme", next); } catch {}
+  };
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,12 +48,12 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
 
   return (
     <>
-      <header className="bg-surface-glass text-primary font-headline fixed top-0 right-0 left-0 md:left-[280px] h-16 backdrop-blur-md border-b border-outline-glow shadow-sm flex items-center justify-between px-6 z-40">
+      <header className="bg-surface-glass font-headline fixed top-0 right-0 left-0 md:left-[280px] h-16 backdrop-blur-md border-b border-outline-glow flex items-center justify-between px-6 z-40">
         {/* Left Side: Workspace Selector and Mobile Toggle */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={onMenuToggle}
-            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/40 transition-colors cursor-pointer"
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant/20 transition-colors cursor-pointer"
             title="Open navigation menu"
           >
             <span className="material-symbols-outlined text-[22px]">menu</span>
@@ -41,7 +62,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 bg-surface-container-high/60 border border-outline-glow rounded-lg px-3 py-1.5 hover:border-primary transition-all text-on-surface text-sm cursor-pointer select-none"
+              className="flex items-center gap-2 glass-panel rounded-lg px-3 py-1.5 hover:border-primary/30 transition-all text-on-surface text-sm cursor-pointer select-none"
             >
               <span className="material-symbols-outlined text-[16px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
                 rocket_launch
@@ -56,8 +77,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
 
             {/* Switcher Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute top-12 left-0 w-64 bg-surface-container-highest border border-outline-glow rounded-xl shadow-2xl p-2 z-50 backdrop-blur-xl">
-                <div className="text-[10px] font-mono text-on-surface-variant/50 uppercase tracking-widest px-2.5 py-1.5 border-b border-outline-glow/50 mb-1">
+              <div className="absolute top-12 left-0 w-64 glass-panel rounded-xl shadow-2xl p-2 z-50 backdrop-blur-xl">
+                <div className="text-[10px] font-mono text-on-surface-variant/40 uppercase tracking-widest px-2.5 py-1.5 border-b border-outline-glow mb-1">
                   Your Workspaces
                 </div>
                 <ul className="space-y-1">
@@ -70,8 +91,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
                         }}
                         className={`w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between transition-colors ${
                           ws.id === activeWorkspaceId
-                            ? "bg-primary/20 text-primary font-bold border border-primary/30"
-                            : "text-on-surface-variant hover:bg-surface-variant/40 hover:text-on-surface"
+                            ? "bg-primary/15 text-primary font-bold"
+                            : "text-on-surface-variant hover:bg-surface-variant/20 hover:text-on-surface"
                         }`}
                       >
                         <div className="flex flex-col min-w-0">
@@ -90,7 +111,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
                     setDropdownOpen(false);
                     setCreateModalOpen(true);
                   }}
-                  className="w-full text-left px-3 py-2 mt-2 border-t border-outline-glow/50 hover:bg-surface-variant/30 text-primary text-xs font-semibold flex items-center gap-2 rounded-b-lg"
+                  className="w-full text-left px-3 py-2 mt-2 border-t border-outline-glow hover:bg-surface-variant/20 text-primary text-xs font-semibold flex items-center gap-2 rounded-b-lg cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[16px]">add_circle</span>
                   Create New Venture
@@ -101,11 +122,11 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
         </div>
 
         {/* Right Side: Indicators and Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Credits Widget */}
           {activeWorkspace && (
-            <div className="hidden sm:flex items-center gap-2 bg-surface-container-high/60 border border-outline-glow rounded-lg px-3 py-1.5 text-xs text-on-surface font-mono">
-              <span className="material-symbols-outlined text-[16px] text-secondary animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <div className="hidden sm:flex items-center gap-2 glass-panel rounded-lg px-3 py-1.5 text-xs text-on-surface font-mono">
+              <span className="material-symbols-outlined text-[16px] text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>
                 bolt
               </span>
               <span>
@@ -118,7 +139,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
           )}
 
           {/* Search bar inside header */}
-          <div className="hidden lg:flex items-center bg-surface-container-high rounded-full px-3 py-1.5 border border-outline-glow focus-within:border-primary transition-colors w-48 xl:w-60">
+          <div className="hidden lg:flex items-center glass-panel rounded-full px-3 py-1.5 focus-within:border-primary/30 transition-colors w-48 xl:w-60">
             <span className="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
             <input
               className="bg-transparent border-none focus:outline-none focus:ring-0 text-on-surface text-xs w-full placeholder-on-surface-variant/40 p-0"
@@ -128,23 +149,36 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
           </div>
 
           <div className="flex items-center gap-1.5">
+            {/* Theme Toggle */}
+            {mounted && (
+              <button
+                onClick={toggleTheme}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/20 transition-all cursor-pointer"
+                title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                <span className="material-symbols-outlined text-[20px]">
+                  {theme === "dark" ? "light_mode" : "dark_mode"}
+                </span>
+              </button>
+            )}
+
             {/* Invite Collaborator Button */}
-            <button 
+            <button
               onClick={() => alert("Invite link copied to clipboard: https://hipmipreneur.com/invite/ws-nexus")}
-              className="hidden sm:flex items-center gap-1.5 bg-primary-container text-on-primary-container px-3.5 py-1.5 rounded-lg text-xs font-semibold hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors shadow-[inset_0_0_10px_rgba(255,255,255,0.2)] cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 bg-primary text-on-primary px-3.5 py-1.5 rounded-lg text-xs font-semibold hover:bg-primary-container hover:text-on-primary-container transition-colors cursor-pointer"
             >
               <span className="material-symbols-outlined text-sm">person_add</span>
               <span>Invite</span>
             </button>
 
             {/* Notifications Button */}
-            <button className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/40 transition-colors scale-95 active:scale-90 relative cursor-pointer">
+            <button className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/20 transition-colors relative cursor-pointer">
               <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-error rounded-full shadow-[0_0_5px_#ffb4ab]"></span>
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-error rounded-full"></span>
             </button>
 
             {/* Apps Button */}
-            <button className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/40 transition-colors scale-95 active:scale-90 cursor-pointer">
+            <button className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-variant/20 transition-colors cursor-pointer">
               <span className="material-symbols-outlined text-[20px]">apps</span>
             </button>
           </div>
@@ -154,7 +188,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
       {/* Create Workspace Modal */}
       {createModalOpen && (
         <div className="fixed inset-0 bg-surface-deep/80 backdrop-blur-md flex items-center justify-center z-50 p-4 md:pl-[280px]">
-          <div className="bg-surface-container border border-outline-glow rounded-xl shadow-2xl max-w-md w-full overflow-hidden p-6 relative">
+          <div className="glass-panel rounded-xl shadow-2xl max-w-md w-full overflow-hidden p-6 relative">
             <button
               onClick={() => setCreateModalOpen(false)}
               className="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
@@ -177,7 +211,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
                   placeholder="e.g. Nexus AI"
                   value={newWorkspaceName}
                   onChange={(e) => setNewWorkspaceName(e.target.value)}
-                  className="w-full bg-surface-container-lowest border border-outline-glow rounded-lg px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  className="w-full bg-surface-container-lowest border border-outline-glow rounded-lg px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary outline-none transition-all"
                 />
               </div>
               <div>
@@ -187,7 +221,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
                   value={newWorkspaceDesc}
                   onChange={(e) => setNewWorkspaceDesc(e.target.value)}
                   rows={3}
-                  className="w-full bg-surface-container-lowest border border-outline-glow rounded-lg px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
+                  className="w-full bg-surface-container-lowest border border-outline-glow rounded-lg px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary outline-none transition-all resize-none"
                 />
               </div>
               <div>
@@ -195,7 +229,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
                 <select
                   value={newWorkspaceType}
                   onChange={(e) => setNewWorkspaceType(e.target.value)}
-                  className="w-full bg-surface-container-lowest border border-outline-glow rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer"
+                  className="w-full bg-surface-container-lowest border border-outline-glow rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary outline-none transition-all cursor-pointer"
                 >
                   <option value="Develop my idea">Develop my idea (Raw concept validation)</option>
                   <option value="Find my idea">Find my idea (Market discovery first)</option>
@@ -212,7 +246,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({ onMenuToggle }) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-on-primary font-bold rounded-lg text-xs shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all cursor-pointer"
+                  className="px-4 py-2 bg-primary text-on-primary font-bold rounded-lg text-xs hover:bg-primary-container transition-all cursor-pointer"
                 >
                   Launch Workspace
                 </button>

@@ -67,31 +67,31 @@ export const SideNavBar: React.FC<SideNavBarProps> = ({ isOpen, onClose }) => {
   ];
 
   return (
-    <nav className={`fixed left-0 top-0 h-screen w-[280px] bg-surface-glass backdrop-blur-xl border-r border-outline-glow shadow-[inset_0_0_10px_rgba(192,193,255,0.1)] flex flex-col py-6 px-3 z-50 transition-transform duration-300 md:translate-x-0 ${isOpen ? "translate-x-0 animate-panel" : "-translate-x-full"} flex`}>
+    <nav className={`fixed left-0 top-0 h-screen w-[280px] bg-surface-glass backdrop-blur-xl border-r border-outline-glow flex flex-col pt-5 pb-3 px-3 z-50 transition-transform duration-300 md:translate-x-0 overflow-hidden ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
       {/* Brand Header */}
-      <div className="flex items-center justify-between mb-6 px-3 h-12 shrink-0">
+      <div className="flex items-center justify-between mb-4 px-3 h-10 shrink-0">
         <Image
           src="/Logo/Transpart.png"
           alt="Hipmipreneur Logo"
           width={160}
           height={48}
-          className="object-contain filter drop-shadow-[0_0_8px_rgba(192,193,255,0.4)]"
+          className="object-contain"
           style={{ width: "auto", height: "auto" }}
           priority
         />
         <button
           onClick={onClose}
-          className="md:hidden text-on-surface-variant hover:text-primary p-1.5 rounded-lg hover:bg-surface-variant/40 transition-colors cursor-pointer flex items-center justify-center"
+          className="md:hidden text-on-surface-variant hover:text-primary p-1.5 rounded-lg hover:bg-surface-variant/30 transition-colors cursor-pointer flex items-center justify-center"
         >
           <span className="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
 
       {/* Main Navigation - Scrollable */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-4 custom-scrollbar">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-3 custom-scrollbar pb-2">
         {navGroups.map((group, groupIdx) => (
           <div key={groupIdx} className="flex flex-col gap-1">
-            <span className="font-mono text-[10px] text-on-surface-variant/50 uppercase tracking-widest px-3 mb-1">
+            <span className="font-mono text-[10px] text-on-surface-variant/40 uppercase tracking-widest px-3 mb-1">
               {group.title}
             </span>
             <ul className="flex flex-col gap-0.5">
@@ -104,15 +104,14 @@ export const SideNavBar: React.FC<SideNavBarProps> = ({ isOpen, onClose }) => {
                       onClick={onClose}
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 border-l-4 ${
                         active
-                          ? "text-primary font-semibold border-primary bg-primary/10 shadow-[inset_0_0_10px_rgba(192,193,255,0.1)]"
-                          : "text-on-surface-variant hover:text-primary hover:bg-surface-variant/30 border-transparent"
+                          ? "text-primary font-semibold border-primary bg-primary/10"
+                          : "text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/20 border-transparent"
                       }`}
                     >
                       <span
-                        className="material-symbols-outlined text-[18px] transition-transform group-hover:scale-110"
+                        className="material-symbols-outlined text-[18px]"
                         style={{
                           fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0",
-                          textShadow: active ? "0 0 10px rgba(192,193,255,0.5)" : "none",
                         }}
                       >
                         {item.icon}
@@ -127,26 +126,29 @@ export const SideNavBar: React.FC<SideNavBarProps> = ({ isOpen, onClose }) => {
         ))}
       </div>
 
-      {/* Bottom Section */}
-      <div className="mt-auto pt-4 flex flex-col gap-4 border-t border-outline-glow">
+      {/* Bottom Section — always visible, never clipped */}
+      <div className="shrink-0 pt-3 flex flex-col gap-2.5 border-t border-outline-glow">
         {/* Ask IVA CTA */}
-        <button className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-inverse-primary text-white font-headline text-xs font-semibold neon-glow-primary hover:bg-primary-container hover:text-on-primary-container transition-all duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]">
-          <span className="material-symbols-outlined text-[16px] animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>
+        <Link
+          href="/dashboard/canvas"
+          onClick={onClose}
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-primary text-on-primary font-headline text-xs font-semibold hover:bg-primary-container hover:text-on-primary-container transition-all duration-200 cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
             smart_toy
           </span>
           <span>Ask IVA</span>
-        </button>
+        </Link>
 
         {/* User Profile Snippet */}
-        <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low border border-outline-glow">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-glow shrink-0 relative">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-lg glass-panel">
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               alt="Founders Profile"
               className="w-full h-full object-cover"
               src={userProfile.avatar}
             />
-            <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-full"></div>
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-headline text-xs font-semibold text-on-surface truncate">

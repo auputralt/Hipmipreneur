@@ -12,18 +12,17 @@ export default function DashboardLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="h-screen bg-surface text-on-surface font-body relative flex overflow-hidden">
-      {/* Background decoration grid and blurs */}
+    <div className="h-screen bg-background text-on-surface font-body relative flex">
+      {/* Subtle ambient background — two soft blobs, no grid */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.35]"></div>
-        <div className="absolute top-[10%] left-[20%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[130px]"></div>
-        <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[110px]"></div>
+        <div className="absolute top-[15%] left-[25%] w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[140px]"></div>
+        <div className="absolute bottom-[15%] right-[15%] w-[400px] h-[400px] bg-secondary/[0.03] rounded-full blur-[120px]"></div>
       </div>
 
       {/* Backdrop overlay for mobile menu drawer */}
       {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 md:hidden cursor-pointer"
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-xs z-40 md:hidden cursor-pointer"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

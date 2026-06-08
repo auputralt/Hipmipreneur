@@ -43,8 +43,29 @@ export default function GetStartedPage() {
         },
         {
           id: "canvas-builder-2",
-          title: "Identify Customer Segments and Problems",
+          title: "Identify Customer Segments & Problems",
           description: "Detail your target segments and rank the severity of their specific problems.",
+          link: "/dashboard/builder",
+          linkText: "Open Builder",
+        },
+        {
+          id: "canvas-builder-uvp",
+          title: "Define Unique Value Proposition (UVP)",
+          description: "Craft a clear UVP statement that communicates your unique promise to target customers.",
+          link: "/dashboard/builder",
+          linkText: "Open Builder",
+        },
+        {
+          id: "canvas-builder-solution",
+          title: "Design MVP Solution",
+          description: "Define the minimum viable product features that deliver on your UVP and solve the core problem.",
+          link: "/dashboard/builder",
+          linkText: "Open Builder",
+        },
+        {
+          id: "canvas-builder-unfair",
+          title: "Identify Unfair Advantage",
+          description: "Document competitive moats that competitors cannot easily copy or buy.",
           link: "/dashboard/builder",
           linkText: "Open Builder",
         },
@@ -160,8 +181,8 @@ export default function GetStartedPage() {
               ></div>
             </div>
           </div>
-          <div className="w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center font-mono text-xs font-bold text-primary shadow-[inset_0_0_10px_rgba(192,193,255,0.1)]">
-            {completedTasks.length}/9
+          <div className="w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center font-mono text-xs font-bold text-primary ">
+            {completedTasks.length}/{phases.reduce((sum, p) => sum + p.tasks.length, 0)}
           </div>
         </div>
       </header>
@@ -182,21 +203,11 @@ export default function GetStartedPage() {
             return (
               <div
                 key={phase.id}
-                className={`glass-panel rounded-xl overflow-hidden transition-all duration-300 relative group ${
-                  phaseStatus === "completed"
-                    ? "border-secondary/40 shadow-[inset_0_0_15px_rgba(0,203,230,0.05)]"
-                    : phaseStatus === "active"
-                    ? "border-primary/50 shadow-[inset_0_0_15px_rgba(192,193,255,0.05)]"
-                    : "opacity-75 border-outline-glow/50"
-                }`}
+                className={`glass-panel rounded-xl overflow-hidden transition-all duration-300 relative group ${ phaseStatus === "completed" ? "border-secondary/40 " : phaseStatus === "active" ? "border-primary/50 " : "opacity-75 border-outline-glow/50" }`}
               >
                 {/* Header Strip Accent */}
                 <div
-                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${
-                    phaseStatus === "completed"
-                      ? "from-secondary to-secondary-container"
-                      : "from-primary to-primary-container"
-                  } opacity-70`}
+                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${ phaseStatus === "completed" ? "from-secondary to-secondary-container" : "from-primary to-primary-container" } opacity-70`}
                 ></div>
 
                 <div className="p-5 flex flex-col gap-4">
@@ -241,22 +252,14 @@ export default function GetStartedPage() {
                       return (
                         <div
                           key={task.id}
-                          className={`flex items-start justify-between gap-4 p-3 rounded-lg border transition-all ${
-                            done
-                              ? "bg-surface-container-low/30 border-secondary/20"
-                              : "bg-surface-container-lowest/50 border-outline-glow/30 hover:border-outline-glow"
-                          }`}
+                          className={`flex items-start justify-between gap-4 p-3 rounded-lg border transition-all ${ done ? "bg-surface-container-low/30 border-secondary/20" : "bg-surface-container-lowest/50 border-outline-glow/30 hover:border-outline-glow" }`}
                         >
                           <div className="flex items-start gap-3">
                             {/* Checkbox button */}
                             <button
                               type="button"
                               onClick={() => handleCheckboxChange(task.id, done)}
-                              className={`w-5 h-5 rounded border mt-0.5 flex items-center justify-center transition-all cursor-pointer ${
-                                done
-                                  ? "bg-secondary border-secondary text-surface-dim shadow-[0_0_10px_rgba(93,230,255,0.4)]"
-                                  : "border-outline-glow hover:border-primary bg-surface-container-high/40"
-                              }`}
+                              className={`w-5 h-5 rounded border mt-0.5 flex items-center justify-center transition-all cursor-pointer ${ done ? "bg-secondary border-secondary text-surface-dim " : "border-outline-glow hover:border-primary bg-surface-container-high/40" }`}
                             >
                               {done && (
                                 <span className="material-symbols-outlined text-sm font-bold">check</span>
@@ -274,11 +277,7 @@ export default function GetStartedPage() {
 
                           <Link
                             href={task.link}
-                            className={`px-3 py-1.5 rounded-md text-[10px] font-semibold transition-all shrink-0 cursor-pointer ${
-                              done
-                                ? "bg-surface-container text-on-surface-variant border border-outline-glow/50"
-                                : "bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-surface-dim hover:shadow-[0_0_10px_rgba(192,193,255,0.3)]"
-                            }`}
+                            className={`px-3 py-1.5 rounded-md text-[10px] font-semibold transition-all shrink-0 cursor-pointer ${ done ? "bg-surface-container text-on-surface-variant border border-outline-glow/50" : "bg-primary/10 text-primary border border-primary/30 hover:bg-primary hover:text-surface-dim " }`}
                           >
                             {task.linkText}
                           </Link>
@@ -298,7 +297,7 @@ export default function GetStartedPage() {
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-outline-glow/30 pb-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(128,131,255,0.6)]">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center ">
                   <span className="material-symbols-outlined text-surface-dim font-bold text-xl">smart_toy</span>
                 </div>
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-secondary rounded-full border-2 border-surface-container"></span>
@@ -326,7 +325,7 @@ export default function GetStartedPage() {
               <div className="flex flex-col gap-2 mt-2">
                 <Link
                   href="/dashboard/canvas"
-                  className="w-full py-2 bg-primary text-on-primary font-bold text-center rounded-lg text-[10px] shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all cursor-pointer"
+                  className="w-full py-2 bg-primary text-on-primary font-bold text-center rounded-lg text-[10px] transition-all cursor-pointer"
                 >
                   Start Lean Canvas Extraction
                 </Link>

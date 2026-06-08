@@ -91,11 +91,32 @@ export default function SalesDecksPage() {
   const handleDownloadDeck = () => {
     if (!currentDeck) return;
     setDownloadingDeck(true);
-    setTimeout(() => {
-      setDownloadingDeck(false);
-      // Simulate file download by creating a virtual link
-      alert("Pitch Deck PDF: 'PDF berkas presentasi berhasil dicompile! Memulai proses pengunduhan...'");
-    }, 1500);
+
+    const slides = currentDeck.slides.map((slide, idx) => `
+      <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 3rem;background:#0c1324;color:#dce2fa;font-family:sans-serif;">
+        <div style="max-width:900px;width:100%;text-align:center;">
+          <p style="font-size:12px;color:#5de6ff;font-family:monospace;margin-bottom:0.5rem;">${activeWorkspace.name} // PITCH DECK</p>
+          <p style="font-size:11px;color:#5de6ff;opacity:0.5;margin-bottom:2rem;">Slide ${idx + 1} of ${currentDeck.slides.length}</p>
+          <h1 style="font-size:2rem;font-weight:900;background:linear-gradient(to right,#c0c1ff,#5de6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.3;margin-bottom:0.75rem;">${slide.title}</h1>
+          ${slide.subtitle ? `<p style="color:#5de6ff;font-family:monospace;font-size:13px;margin-bottom:2rem;">${slide.subtitle}</p>` : ''}
+          <ul style="list-style:none;padding:0;max-width:700px;margin:0 auto;text-align:left;">
+            ${slide.bulletPoints.map(bp => `<li style="margin-bottom:0.75rem;font-size:14px;color:#dce2fa;padding-left:1.5rem;position:relative;"><span style="position:absolute;left:0;color:#5de6ff;">▶</span> ${bp}</li>`).join("")}
+          </ul>
+        </div>
+      </div>`).join("\n");
+
+    const htmlContent = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${activeWorkspace.name} — Pitch Deck</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#0c1324;}</style></head><body>${slides}</body></html>`;
+
+    const blob = new Blob([htmlContent], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${activeWorkspace.name.replace(/\s+/g, "_")}_Pitch_Deck.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setDownloadingDeck(false);
   };
 
   const activeSlide = currentDeck?.slides?.[activeSlideIdx];
@@ -162,7 +183,7 @@ export default function SalesDecksPage() {
           /* AI Progress Loader */
           <div className="glass-panel border border-outline-glow rounded-xl p-10 flex flex-col items-center justify-center text-center h-[500px] gap-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_30px_rgba(192,193,255,0.6)] animate-pulse">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-[0_0_30px_rgba(167, 139, 250, 0.4)] animate-pulse">
                 <span className="material-symbols-outlined text-surface-dim font-bold text-3xl animate-spin">sync</span>
               </div>
               <span className="absolute bottom-0 right-0 w-4 h-4 bg-secondary rounded-full border-2 border-surface-container"></span>
@@ -201,11 +222,7 @@ export default function SalesDecksPage() {
                     <button
                       key={idx}
                       onClick={() => setActiveSlideIdx(idx)}
-                      className={`w-full text-left p-3 rounded-lg border transition-all flex flex-col gap-1.5 cursor-pointer relative group ${
-                        isSlideActive
-                          ? "bg-primary/10 border-primary text-primary"
-                          : "bg-surface-container-low border-outline-glow/30 hover:bg-surface-container/50 text-on-surface"
-                      }`}
+                      className={`w-full text-left p-3 rounded-lg border transition-all flex flex-col gap-1.5 cursor-pointer relative group ${ isSlideActive ? "bg-primary/10 border-primary text-primary" : "bg-surface-container-low border-outline-glow/30 hover:bg-surface-container/50 text-on-surface" }`}
                     >
                       <div className="flex justify-between items-center w-full">
                         <span className="font-mono text-[9px] text-on-surface-variant font-bold">SLIDE {idx + 1}</span>
@@ -221,7 +238,7 @@ export default function SalesDecksPage() {
             {/* Center Box: Slide Preview Canvas (6 / 12) */}
             <div className="xl:col-span-6 flex flex-col gap-3 min-h-0 justify-center">
               {activeSlide && (
-                <div className="flex-1 bg-surface-deep border border-outline-glow rounded-xl aspect-video flex flex-col p-8 justify-center relative shadow-2xl bg-grid-pattern overflow-hidden">
+                <div className="flex-1 bg-surface-deep border border-outline-glow rounded-xl aspect-video flex flex-col p-8 justify-center relative overflow-hidden">
                   
                   {/* Glowing decoration circle in background */}
                   <div className="absolute -top-1/4 -right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
@@ -236,7 +253,7 @@ export default function SalesDecksPage() {
                   {/* Slide Content */}
                   <div className="space-y-4 my-auto relative z-10">
                     <div>
-                      <h2 className="font-headline text-gradient font-black text-lg md:text-xl leading-tight max-w-lg">
+                      <h2 className="font-headline font-black text-lg md:text-xl leading-tight max-w-lg">
                         {activeSlide.title}
                       </h2>
                       {activeSlide.subtitle && (
@@ -382,7 +399,7 @@ export default function SalesDecksPage() {
             </div>
             <button
               onClick={handleGenerate}
-              className="mt-2 flex items-center gap-2 bg-primary text-surface-dim font-bold px-5 py-3 rounded-lg text-xs shadow-[0_0_15px_rgba(192,193,255,0.3)] hover:shadow-[0_0_20px_rgba(192,193,255,0.5)] transition-all cursor-pointer font-sans"
+              className="mt-2 flex items-center gap-2 bg-primary text-surface-dim font-bold px-5 py-3 rounded-lg text-xs transition-all cursor-pointer font-sans"
             >
               <span className="material-symbols-outlined text-base">smart_toy</span>
               <span>Buat Pitch Deck (3,000 Kredit)</span>
