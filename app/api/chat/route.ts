@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const BLUESMIND_KEY = process.env.BLUESMIND_API_KEY;
 const BLUESMIND_URL = process.env.BLUESMIND_BASE_URL || process.env.BLUESMIND_API_URL || "https://api.bluesminds.com";
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
@@ -66,41 +65,13 @@ You are in the "${path}" phase. Your opening line should be:
 
 ## Important
 - Do NOT role-play or break character
-- Do NOT mention you are an AI, language model, or Claude
+- Do NOT mention you are an AI, language model, or any specific model name
 - Do NOT give generic startup advice — tailor everything to what THIS user has told you
 - Keep responses concise — aim for 3-5 short paragraphs maximum per message
 - Every message should end with a question or a prompt that moves the conversation forward`;
 }
 
 // ── Streaming helpers ────────────────────────────────────────
-
-async function streamClaude(systemPrompt: string, messages: { role: string; content: string }[]) {
-  if (!ANTHROPIC_KEY) throw new Error("ANTHROPIC_API_KEY not configured");
-
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": ANTHROPIC_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages,
-      stream: true,
-    }),
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Claude API error ${response.status}: ${errText}`);
-  }
-
-  return response.body;
-}
 
 async function streamBluesMind(systemPrompt: string, messages: { role: string; content: string }[]) {
   if (!BLUESMIND_KEY) throw new Error("BLUESMIND_API_KEY not configured");
@@ -156,12 +127,11 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = buildSystemPrompt(path || "develop");
 
-    // Try providers in order: Claude → BluesMind → OpenRouter
+    // Try providers in order: BluesMind → OpenRouter
     let stream: ReadableStream<Uint8Array> | null = null;
     let provider = "none";
 
     for (const [name, fn] of [
-      ["claude", () => streamClaude(systemPrompt, messages)],
       ["bluesmind", () => streamBluesMind(systemPrompt, messages)],
       ["openrouter", () => streamOpenRouter(systemPrompt, messages)],
     ] as const) {
@@ -182,7 +152,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Transform stream to SSE format
+    // Transform stream — both providers use OpenAI-compatible SSE format
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
@@ -201,18 +171,12 @@ export async function POST(req: NextRequest) {
             for (const line of lines) {
               if (!line.trim() || line.startsWith("event:")) continue;
 
-              // Claude SSE format
               if (line.startsWith("data: ")) {
                 const data = line.slice(6).trim();
                 if (data === "[DONE]") continue;
 
                 try {
                   const parsed = JSON.parse(data);
-
-                  // Claude: content_block_delta with text
-                  if (parsed.type === "content_block_delta" && parsed.delta?.text) {
-                    controller.enqueue(encoder.encode(parsed.delta.text));
-                  }
 
                   // OpenAI-compatible: choices[0].delta.content
                   if (parsed.choices?.[0]?.delta?.content) {
