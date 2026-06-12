@@ -5,6 +5,8 @@
 [![Styling](https://img.shields.io/badge/Styling-Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Database](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
 [![Payment](https://img.shields.io/badge/Payment-Midtrans-navy?style=flat-square)](https://midtrans.com/)
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=flat-square&logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
 
 > *"Bangun dari riset, bukan dari asumsi."* (Build from research, not assumptions.)
 
@@ -124,6 +126,20 @@ The project uses `.env.local` for local secrets. The essential keys include:
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions from everyone — whether you're fixing a bug, adding a feature, improving documentation, or suggesting ideas. Every contribution helps make Hipmipreneur better for Indonesian founders.
+
+**Quick start:**
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/your-feature-name`)
+3. Make your changes and commit
+4. Open a Pull Request
+
+For detailed guidelines on setup, coding standards, commit conventions, and the PR process, please read our full **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+
+---
+
 ## 📄 License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**. See the [LICENSE](LICENSE) file for the full text.
