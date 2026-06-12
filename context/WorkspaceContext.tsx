@@ -825,7 +825,6 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setActiveWorkspaceId(id);
 
       // Persist to Supabase
-      const userId = user?.id;
       if (userId) {
         ds.createWorkspaceInDb({
           ...newWorkspace,
@@ -836,7 +835,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       return id;
     },
-    [user]
+    [userId]
   );
 
   const switchWorkspace = (id: string) => {
