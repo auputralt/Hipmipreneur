@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabase } from "./supabase";
+import type { ChatMessageType, WorkspaceInsight } from "./types";
 
 // ============================================================
 // Helper: generate unique IDs
@@ -640,6 +641,86 @@ export async function submitPublicInterview(interview: any) {
     transcript_text: interview.transcriptText,
     date: new Date().toISOString().split("T")[0],
   });
+}
+
+// ============================================================
+// CHAT MESSAGES
+// ============================================================
+export async function loadChatMessages(workspaceId: string): Promise<ChatMessageType[] | null> {
+  const { data, error } = await supabase
+    .from("chat_messages")
+    .select("*")
+    .eq("workspace_id", workspaceId)
+    .order("timestamp", { ascending: true });
+  if (error || !data) return null;
+  return data.map((m: any) => ({
+    id: m.id,
+    workspaceId: m.workspace_id,
+    role: m.role,
+    content: m.content,
+    timestamp: m.timestamp,
+    suggestionChips: m.suggestion_chips || [],
+  }));
+}
+
+export async function saveChatMessage(msg: {
+  id: string;
+  workspaceId: string;
+  role: "user" | "assistant";
+  content: string;
+  suggestionChips?: string[];
+}): Promise<void> {
+  await supabase.from("chat_messages").insert({
+    id: msg.id,
+    workspace_id: msg.workspaceId,
+    role: msg.role,
+    content: msg.content,
+    timestamp: new Date().toISOString(),
+    suggestion_chips: msg.suggestionChips || [],
+  });
+}
+
+// ============================================================
+// WORKSPACE INSIGHTS
+// ============================================================
+export async function loadWorkspaceInsights(workspaceId: string): Promise<WorkspaceInsight[] | null> {
+  const { data, error } = await supabase
+    .from("workspace_insights")
+    .select("*")
+    .eq("workspace_id", workspaceId)
+    .order("created_at", { ascending: true });
+  if (error || !data) return null;
+  return data.map((i: any) => ({
+    id: i.id,
+    workspaceId: i.workspace_id,
+    type: i.type,
+    content: i.content,
+    sourceMessageId: i.source_message_id,
+    confidence: i.confidence,
+    createdAt: i.created_at,
+  }));
+}
+
+export async function saveWorkspaceInsight(insight: {
+  id: string;
+  workspaceId: string;
+  type: string;
+  content: string;
+  sourceMessageId: string;
+  confidence: number;
+}): Promise<void> {
+  await supabase.from("workspace_insights").insert({
+    id: insight.id,
+    workspace_id: insight.workspaceId,
+    type: insight.type,
+    content: insight.content,
+    source_message_id: insight.sourceMessageId,
+    confidence: insight.confidence,
+  });
+}
+
+export async function deleteWorkspaceInsight(id: string): Promise<void> {
+  await supabase.from("workspace_insights").delete().eq("id", id);
 }
 
 // Export the uid helper

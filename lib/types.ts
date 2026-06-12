@@ -76,5 +76,38 @@ export interface AnalysisReport {
   createdAt: string;
 }
 
+// ============================================================
+// CHAT
+// ============================================================
+
+export interface ChatMessageType {
+  id: string;
+  workspaceId: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+  suggestionChips?: string[];
+}
+
+export interface WorkspaceInsight {
+  id: string;
+  workspaceId: string;
+  type: "customer_segment" | "problem" | "solution" | "uvp" | "revenue" | "skill";
+  content: string;
+  sourceMessageId: string;
+  confidence: number;
+  createdAt: string;
+}
+
+export type StartupPath = "find" | "develop" | "grow";
+
+export interface StartupPathOption {
+  path: StartupPath;
+  title: string;
+  description: string;
+  icon: string;
+  greeting: string;
+}
+
 // Re-export existing types that pages need
 export type { LeanCanvas, CustomerSegment, Workspace, UserProfile, ResearchProject, Interview, InsightReport, Persona, PositioningDoc, LandingPageAsset, SalesDeckAsset, SalesDeckSlide } from "../context/WorkspaceContext";
