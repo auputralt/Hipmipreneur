@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useWorkspace } from "../../../context/WorkspaceContext";
 
 interface TaskItem {
@@ -23,7 +24,9 @@ interface Phase {
 }
 
 export default function GetStartedPage() {
-  const { activeWorkspace, completedTasks, completeTask, uncompleteTask } = useWorkspace();
+  const { activeWorkspace, completedTasks, completeTask, uncompleteTask, createWorkspaceForChat } = useWorkspace();
+
+  const router = useRouter();
 
   const phases: Phase[] = [
     {
@@ -186,6 +189,73 @@ export default function GetStartedPage() {
           </div>
         </div>
       </header>
+
+      {/* Startup Creation Cards */}
+      <section className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-headline text-lg font-bold text-on-surface">Create a new startup</h2>
+            <p className="text-xs text-on-surface-variant mt-1">Choose your starting point and let HVA guide you.</p>
+          </div>
+          <div className="flex items-center gap-1.5 text-on-surface-variant/40">
+            <span className="material-symbols-outlined text-sm">rocket_launch</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            {
+              path: "find" as const,
+              title: "Help me find an idea",
+              description: "Explore promising directions with HVA and discover a business worth pursuing.",
+              icon: "lightbulb",
+              colorClass: "group-hover:border-primary/50",
+              iconBg: "bg-primary/10 text-primary",
+            },
+            {
+              path: "develop" as const,
+              title: "Develop my idea",
+              description: "Shape your existing concept into a validated business model with HVA's guidance.",
+              icon: "build",
+              colorClass: "group-hover:border-secondary/50",
+              iconBg: "bg-secondary/10 text-secondary",
+            },
+            {
+              path: "grow" as const,
+              title: "Grow my business",
+              description: "Identify growth opportunities and build go-to-market assets with HVA.",
+              icon: "trending_up",
+              colorClass: "group-hover:border-primary/50",
+              iconBg: "bg-primary/10 text-primary",
+            },
+          ].map((card) => (
+            <button
+              key={card.path}
+              onClick={() => {
+                const wsId = createWorkspaceForChat(card.path);
+                router.push(`/dashboard/chat/${wsId}?path=${card.path}`);
+              }}
+              className="glass-panel p-5 rounded-xl border border-outline/30 text-left flex flex-col gap-3 transition-all hover:shadow-lg hover:shadow-primary/5 group cursor-pointer"
+            >
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${card.iconBg} transition-all group-hover:scale-110`}>
+                <span className="material-symbols-outlined text-xl">{card.icon}</span>
+              </div>
+              <div>
+                <h3 className="font-headline text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-on-surface-variant mt-1.5 leading-relaxed line-clamp-3">
+                  {card.description}
+                </p>
+              </div>
+              <div className="flex items-center gap-1 text-primary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity mt-auto">
+                <span>Start with HVA</span>
+                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
 
       {/* Main Grid Content */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">

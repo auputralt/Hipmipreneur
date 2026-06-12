@@ -246,6 +246,7 @@ export interface WorkspaceContextType {
   interviewScripts: Record<string, ScriptSection[]>; // Mapped by workspaceId
   isDataLoaded: boolean; // True once initial Supabase load completes
   createWorkspace: (name: string, description: string, type: string) => Workspace;
+  createWorkspaceForChat: (path: "find" | "develop" | "grow") => string;
   switchWorkspace: (id: string) => void;
   updateStartingPath: (path: string) => void;
   completeTask: (taskId: string) => void;
@@ -794,6 +795,49 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     return newWorkspace;
   };
+
+  const createWorkspaceForChat = useCallback(
+    (path: "find" | "develop" | "grow") => {
+      const pathNames: Record<string, string> = {
+        find: "Find my idea",
+        develop: "Develop my idea",
+        grow: "Grow my business",
+      };
+      const defaultNames: Record<string, string> = {
+        find: "New Venture — Finding Ideas",
+        develop: "New Venture — Developing Idea",
+        grow: "New Venture — Growing Business",
+      };
+
+      const id = ds.uid();
+      const newWorkspace: Workspace = {
+        id,
+        name: defaultNames[path],
+        description: "",
+        credits: 5000,
+        healthScore: 0,
+        type: pathNames[path],
+        isArchived: false,
+        createdAt: new Date().toISOString(),
+      };
+
+      setWorkspaces((prev) => [...prev, newWorkspace]);
+      setActiveWorkspaceId(id);
+
+      // Persist to Supabase
+      const userId = user?.id;
+      if (userId) {
+        ds.createWorkspaceInDb({
+          ...newWorkspace,
+          userId,
+          onboardingCompleted: true,
+        });
+      }
+
+      return id;
+    },
+    [user]
+  );
 
   const switchWorkspace = (id: string) => {
     if (workspaces.some((w) => w.id === id)) {
@@ -2152,6 +2196,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         interviewScripts,
         isDataLoaded,
         createWorkspace,
+        createWorkspaceForChat,
         switchWorkspace,
         updateStartingPath,
         completeTask,
